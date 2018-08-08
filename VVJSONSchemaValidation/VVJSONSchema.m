@@ -33,8 +33,11 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
     static NSSet<NSURL *> *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullable-to-nonnull-conversion"
         NSArray<NSURL *> *uris = @[ [NSURL URLWithString:kJSONSchemaDefaultString],
                                     [NSURL URLWithString:@"http://json-schema.org/schema#"] ];
+#pragma clang diagnostic pop
         
         instance = [NSSet setWithArray:uris];
     });
@@ -47,10 +50,13 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
     static NSSet<NSURL *> *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullable-to-nonnull-conversion"
         NSArray<NSURL *> *uris = @[ [NSURL URLWithString:@"http://json-schema.org/hyper-schema#"],
                                     [NSURL URLWithString:@"http://json-schema.org/draft-04/hyper-schema#"],
                                     [NSURL URLWithString:@"http://json-schema.org/draft-03/schema#"],
                                     [NSURL URLWithString:@"http://json-schema.org/draft-03/hyper-schema#"] ];
+#pragma clang diagnostic pop
         
         instance = [NSSet setWithArray:uris];
     });
