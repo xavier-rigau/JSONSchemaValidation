@@ -41,7 +41,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     [super setUp];
 
     // prepare URLs of test cases
-    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:nil];
+    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"draft4"];
     if (urls.count == 0) {
         XCTFail(@"No JSON test cases found.");
     }
@@ -72,14 +72,14 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     VVMutableJSONSchemaStorage *storage = [VVMutableJSONSchemaStorage storage];
     NSURL *baseRemoteSchemasURI = [NSURL URLWithString:kBaseRemoteSchemasURIString];
     
-    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"remotes"];
+    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"draft4/remotes"];
     for (NSURL *url in urls) {
         NSString *documentName = url.lastPathComponent;
         NSURL *schemaURI = [NSURL URLWithString:documentName relativeToURL:baseRemoteSchemasURI];
         [self addSchemaFromURL:url withScopeURI:schemaURI intoStorage:storage];
     }
     
-    NSArray<NSURL *> *subfolderURLs = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"remotes/folder"];
+    NSArray<NSURL *> *subfolderURLs = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"draft4/remotes/folder"];
     for (NSURL *url in subfolderURLs) {
         NSString *documentName = url.lastPathComponent;
         NSURL *schemaURI = [NSURL URLWithString:[@"folder" stringByAppendingPathComponent:documentName] relativeToURL:baseRemoteSchemasURI];
@@ -136,7 +136,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 
 - (void)testPerformance
 {
-    NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"advanced-example" withExtension:@"json"];
+    NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"advanced-example" withExtension:@"json" subdirectory:@"draft4"];
     VVJSONSchemaTestCase *testCase = [[VVJSONSchemaTestCase testCasesWithContentsOfURL:url] firstObject];
 
     CFTimeInterval startTime = CACurrentMediaTime();
@@ -172,7 +172,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 {
     dispatch_queue_t queue = dispatch_queue_create("com.argentumko.VVJSONSchemaTests.Parallelism", DISPATCH_QUEUE_CONCURRENT);
 
-    NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"advanced-example" withExtension:@"json"];
+    NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"advanced-example" withExtension:@"json" subdirectory:@"draft4"];
     VVJSONSchemaTestCase *testCase = [[VVJSONSchemaTestCase testCasesWithContentsOfURL:url] firstObject];
     NSDictionary<NSString *, id> *schemaObject = testCase.schemaObject;
     
