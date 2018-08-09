@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2A377C5D211C230000B0508F /* draft4 in Resources */ = {isa = PBXBuildFile; fileRef = 2A377C5C211C230000B0508F /* draft4 */; };
+		2A377C5F211C2F1200B0508F /* draft6 in Resources */ = {isa = PBXBuildFile; fileRef = 2A377C5E211C2F1200B0508F /* draft6 */; };
+		2A377C61211C2F6D00B0508F /* VVJSONSchemaDraft6Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A377C60211C2F6D00B0508F /* VVJSONSchemaDraft6Tests.m */; };
+		2A377C68211C300B00B0508F /* remotes in Resources */ = {isa = PBXBuildFile; fileRef = 2A377C67211C300B00B0508F /* remotes */; };
 		7D32BE731A53F1C4009EB554 /* VVJSONSchemaStringValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D32BE721A53F1C4009EB554 /* VVJSONSchemaStringValidator.m */; };
 		7D32BE751A540270009EB554 /* VVJSONSchemaStringValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D32BE721A53F1C4009EB554 /* VVJSONSchemaStringValidator.m */; };
 		7D32BE791A5447A6009EB554 /* VVJSONSchemaArrayValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D32BE781A5447A6009EB554 /* VVJSONSchemaArrayValidator.m */; };
@@ -308,6 +311,9 @@
 
 /* Begin PBXFileReference section */
 		2A377C5C211C230000B0508F /* draft4 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = draft4; sourceTree = "<group>"; };
+		2A377C5E211C2F1200B0508F /* draft6 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = draft6; sourceTree = "<group>"; };
+		2A377C60211C2F6D00B0508F /* VVJSONSchemaDraft6Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVJSONSchemaDraft6Tests.m; sourceTree = "<group>"; };
+		2A377C67211C300B00B0508F /* remotes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = remotes; sourceTree = "<group>"; };
 		7D32BE711A53F1C4009EB554 /* VVJSONSchemaStringValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVJSONSchemaStringValidator.h; sourceTree = "<group>"; };
 		7D32BE721A53F1C4009EB554 /* VVJSONSchemaStringValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVJSONSchemaStringValidator.m; sourceTree = "<group>"; };
 		7D32BE771A5447A6009EB554 /* VVJSONSchemaArrayValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVJSONSchemaArrayValidator.h; sourceTree = "<group>"; };
@@ -487,6 +493,7 @@
 			isa = PBXGroup;
 			children = (
 				7D4CAF2B1A518E0B003E1281 /* VVJSONSchemaTests.m */,
+				2A377C60211C2F6D00B0508F /* VVJSONSchemaDraft6Tests.m */,
 				7D4CAF2D1A518E87003E1281 /* VVJSONSchemaTestCase.h */,
 				7D4CAF2E1A518E87003E1281 /* VVJSONSchemaTestCase.m */,
 				7D4CAF881A51BAB3003E1281 /* NSNumber+VVJSONNumberTypesTests.m */,
@@ -584,7 +591,9 @@
 		7DF695C91A553C6900739238 /* Test Suite JSONs */ = {
 			isa = PBXGroup;
 			children = (
+				2A377C67211C300B00B0508F /* remotes */,
 				2A377C5C211C230000B0508F /* draft4 */,
+				2A377C5E211C2F1200B0508F /* draft6 */,
 			);
 			name = "Test Suite JSONs";
 			path = JSON;
@@ -841,7 +850,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A377C68211C300B00B0508F /* remotes in Resources */,
 				2A377C5D211C230000B0508F /* draft4 in Resources */,
+				2A377C5F211C2F1200B0508F /* draft6 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -914,6 +925,7 @@
 				7D4CAF891A51BAB3003E1281 /* NSNumber+VVJSONNumberTypesTests.m in Sources */,
 				7D4CAF681A519C17003E1281 /* VVJSONSchemaReference.m in Sources */,
 				7D4CB0A81A52B268003E1281 /* VVJSONSchemaTypeValidator.m in Sources */,
+				2A377C61211C2F6D00B0508F /* VVJSONSchemaDraft6Tests.m in Sources */,
 				7DF696131A56833100739238 /* NSString+VVJSONPointer.m in Sources */,
 				7D32BE931A5460DC009EB554 /* NSArray+VVJSONComparison.m in Sources */,
 				7D4CAF6B1A519C17003E1281 /* VVJSONSchemaErrors.m in Sources */,

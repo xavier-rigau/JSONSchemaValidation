@@ -14,7 +14,7 @@
 
 extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 
-@interface VVJSONSchemaTests : XCTestCase
+@interface VVJSONSchemaDraft6Tests : XCTestCase
 {
     VVJSONSchemaStorage *_referenceStorage;
     NSArray<VVJSONSchemaTestCase *> *_testSuite;
@@ -22,7 +22,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 
 @end
 
-@implementation VVJSONSchemaTests
+@implementation VVJSONSchemaDraft6Tests
 
 + (void)setUp
 {
@@ -41,7 +41,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     [super setUp];
 
     // prepare URLs of test cases
-    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"draft4"];
+    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"draft6"];
     if (urls.count == 0) {
         XCTFail(@"No JSON test cases found.");
     }
@@ -103,7 +103,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     }
 }
 
-- (void)testSchemasInstantiationOnly
+- (void)testSchemasDraft6InstantiationOnly
 {
     [self measureBlock:^{
         NSError *error = nil;
@@ -114,7 +114,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     }];
 }
 
-- (void)testSchemasValidation
+- (void)testSchemasDraft6Validation
 {
     // have to instantiate the schemas first!
     for (VVJSONSchemaTestCase *testCase in _testSuite) {
@@ -132,66 +132,6 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
             XCTAssertTrue(success, @"Test case '%@' failed: '%@'.", testCase.testCaseDescription, error);
         }
     }];
-}
-
-- (void)testPerformance
-{
-    NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"advanced-example" withExtension:@"json" subdirectory:@"draft4"];
-    VVJSONSchemaTestCase *testCase = [[VVJSONSchemaTestCase testCasesWithContentsOfURL:url] firstObject];
-
-    CFTimeInterval startTime = CACurrentMediaTime();
-    BOOL success = [testCase instantiateSchemaWithReferenceStorage:nil error:NULL];
-    if (success == NO) {
-        XCTFail(@"Invalid test case.");
-        return;
-    }
-    CFTimeInterval firstInstantiationTime = CACurrentMediaTime() - startTime;
-    NSLog(@"First instantiation time: %.2f ms", (firstInstantiationTime * 1000.0));
-    
-    uint64_t nanoseconds = dispatch_benchmark(1000, ^{
-        [testCase instantiateSchemaWithReferenceStorage:nil error:NULL];
-    });
-    NSLog(@"Average instantiation time: %.2f ms", (nanoseconds * 1e-6));
-    
-    startTime = CACurrentMediaTime();
-    success = [testCase runTestsWithError:NULL];
-    if (success == NO) {
-        XCTFail(@"Invalid test case.");
-        return;
-    }
-    CFTimeInterval firstValidationTime = CACurrentMediaTime() - startTime;
-    NSLog(@"First validation time: %.2f ms", (firstValidationTime * 1000.0));
-
-    nanoseconds = dispatch_benchmark(1000, ^{
-        [testCase runTestsWithError:NULL];
-    });
-    NSLog(@"Average validation time: %.2f ms", (nanoseconds * 1e-6));
-}
-
-- (void)testMultithreading
-{
-    dispatch_queue_t queue = dispatch_queue_create("com.argentumko.VVJSONSchemaTests.Parallelism", DISPATCH_QUEUE_CONCURRENT);
-
-    NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"advanced-example" withExtension:@"json" subdirectory:@"draft4"];
-    VVJSONSchemaTestCase *testCase = [[VVJSONSchemaTestCase testCasesWithContentsOfURL:url] firstObject];
-    NSDictionary<NSString *, id> *schemaObject = testCase.schemaObject;
-    
-    for (NSUInteger parallelism = 0; parallelism < 10; parallelism++) {
-        dispatch_async(queue, ^{
-            VVJSONSchema *schema = [VVJSONSchema schemaWithDictionary:schemaObject baseURI:nil referenceStorage:self->_referenceStorage error:NULL];
-            XCTAssertNotNil(schema);
-        });
-    }
-    dispatch_sync(queue, ^{});
-    
-    [testCase instantiateSchemaWithReferenceStorage:_referenceStorage error:NULL];
-    for (NSUInteger parallelism = 0; parallelism < 10; parallelism++) {
-        dispatch_async(queue, ^{
-            BOOL success = [testCase runTestsWithError:NULL];
-            XCTAssertTrue(success);
-        });
-    }
-    dispatch_sync(queue, ^{});
 }
 
 @end
