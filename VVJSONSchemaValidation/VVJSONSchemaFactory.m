@@ -18,12 +18,12 @@ static NSString * const kSchemaKeywordTitle = @"title";
 static NSString * const kSchemaKeywordDescription = @"description";
 static NSString * const kSchemaKeywordReference = @"$ref";
 
-+ (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping
++ (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping specification:(VVJSONSchemaSpecification *)specification
 {
-    return [[self alloc] initWithScopeURI:scopeURI keywordsMapping:keywordsMapping];
+    return [[self alloc] initWithScopeURI:scopeURI keywordsMapping:keywordsMapping specification:specification];
 }
 
-- (instancetype)initWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping
+- (instancetype)initWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping specification:(VVJSONSchemaSpecification *)specification
 {
     NSParameterAssert(scopeURI);
     NSAssert(keywordsMapping.count > 0, @"Schema factory requires a valid mapping dictionary of schema keywords.");
@@ -32,6 +32,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
     if (self) {
         _scopeURI = scopeURI;
         _keywordsMapping = [keywordsMapping copy];
+        _specification = specification;
     }
     
     return self;
@@ -46,7 +47,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
 {
     NSParameterAssert(scopeURI);
     
-    return [[self.class alloc] initWithScopeURI:scopeURI keywordsMapping:self.keywordsMapping];
+    return [[self.class alloc] initWithScopeURI:scopeURI keywordsMapping:self.keywordsMapping specification:self.specification];
 }
 
 - (instancetype)factoryByAppendingScopeComponent:(NSString *)scopeComponent
@@ -76,7 +77,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
     
     // append the path to the fragment and construct a factory
     NSURL *newScopeURI = [self.scopeURI vv_URIByAppendingFragmentComponent:scopePath];
-    return [[self.class alloc] initWithScopeURI:newScopeURI keywordsMapping:self.keywordsMapping];
+    return [[self.class alloc] initWithScopeURI:newScopeURI keywordsMapping:self.keywordsMapping specification:self.specification];
 }
 
 - (VVJSONSchema *)schemaWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary error:(NSError * __autoreleasing *)error
@@ -86,7 +87,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
     if (schemaReferenceString != nil) {
         NSURL *referenceURI = [self.class schemaReferenceURIWithJSONReference:schemaReferenceString scope:self.scopeURI];
         if (referenceURI != nil) {
-            return [[VVJSONSchemaReference alloc] initWithScopeURI:self.scopeURI referenceURI:referenceURI];
+            return [[VVJSONSchemaReference alloc] initWithScopeURI:self.scopeURI referenceURI:referenceURI specification:self.specification];
         } else {
             if (error != NULL) {
                 *error = [NSError vv_JSONSchemaErrorWithCode:VVJSONSchemaErrorCodeInvalidSchemaReference failingObject:schemaDictionary];
@@ -182,7 +183,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
     }
     
     // finally, instantiate the schema itself
-    VVJSONSchema *schema = [[VVJSONSchema alloc] initWithScopeURI:effectiveFactory.scopeURI title:title description:description validators:validators subschemas:unboundSubschemas];
+    VVJSONSchema *schema = [[VVJSONSchema alloc] initWithScopeURI:effectiveFactory.scopeURI title:title description:description validators:validators subschemas:unboundSubschemas specification:self.specification];
     
     return schema;
 }

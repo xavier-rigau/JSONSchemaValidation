@@ -10,6 +10,7 @@
 
 @class VVJSONSchema;
 @class VVJSONSchemaStorage;
+@class VVJSONSchemaSpecification;
 @class VVJSONSchemaTest;
 
 @interface VVJSONSchemaTestCase : NSObject
@@ -19,10 +20,10 @@
 @property (nonatomic, readonly, copy) NSArray<VVJSONSchemaTest *> *tests;
 @property (nonatomic, readonly, strong) VVJSONSchema *schema;
 
-+ (instancetype)testCaseWithObject:(NSDictionary<NSString *, id> *)testCaseObject;
-+ (NSArray<VVJSONSchemaTestCase *> *)testCasesWithContentsOfURL:(NSURL *)testCasesJSONURL;
++ (instancetype)testCaseWithObject:(NSDictionary<NSString *, id> *)testCaseObject specification:(VVJSONSchemaSpecification *)specification;
++ (NSArray<VVJSONSchemaTestCase *> *)testCasesWithContentsOfURL:(NSURL *)testCasesJSONURL specification:(VVJSONSchemaSpecification *)specification;
 
-- (instancetype)initWithDescription:(NSString *)description schemaObject:(NSDictionary<NSString *, id> *)schemaObject tests:(NSArray<VVJSONSchemaTest *> *)tests;
+- (instancetype)initWithDescription:(NSString *)description schemaObject:(NSDictionary<NSString *, id> *)schemaObject tests:(NSArray<VVJSONSchemaTest *> *)tests specification:(VVJSONSchemaSpecification *)specification;
 
 - (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage error:(NSError * __autoreleasing *)error;
 - (BOOL)runTestsWithError:(NSError * __autoreleasing *)error;

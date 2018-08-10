@@ -12,6 +12,12 @@
 #import "VVJSONSchemaValidationContext.h"
 #import "NSURL+VVJSONReferencing.h"
 
+@interface VVJSONSchema ()
+
+@property (strong, nonatomic) VVJSONSchemaSpecification *specification;
+
+@end
+
 @implementation VVJSONSchema
 
 static NSString * const kJSONSchemaDefaultString = @"http://json-schema.org/draft-04/schema#";
@@ -64,7 +70,7 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
     return instance;
 }
 
-- (instancetype)initWithScopeURI:(NSURL *)uri title:(NSString *)title description:(NSString *)description validators:(NSArray<id<VVJSONSchemaValidator>> *)validators subschemas:(NSArray<VVJSONSchema *> *)subschemas
+- (instancetype)initWithScopeURI:(NSURL *)uri title:(NSString *)title description:(NSString *)description validators:(NSArray<id<VVJSONSchemaValidator>> *)validators subschemas:(NSArray<VVJSONSchema *> *)subschemas specification:(VVJSONSchemaSpecification *)specification
 {
     NSParameterAssert(uri);
     
@@ -75,6 +81,7 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
         _schemaDescription = [description copy];
         _validators = [validators copy];
         _subschemas = [subschemas copy];
+        _specification = specification;
     }
     
     return self;
@@ -87,7 +94,7 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
 
 #pragma mark - Schema parsing
 
-+ (instancetype)schemaWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary baseURI:(NSURL *)baseURI referenceStorage:(VVJSONSchemaStorage *)referenceStorage error:(NSError *__autoreleasing *)error
++ (instancetype)schemaWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary baseURI:(NSURL *)baseURI referenceStorage:(VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError *__autoreleasing *)error
 {
     // retrieve metaschema URI
     id metaschemaURIString = schemaDictionary[kSchemaKeywordSchema];
@@ -123,7 +130,7 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
     NSError *internalError = nil;
     @autoreleasepool {
         // instantiate a root schema factory and use it to create the schema
-        VVJSONSchemaFactory *factory = [VVJSONSchemaFactory factoryWithScopeURI:baseURI keywordsMapping:keywordsMapping];
+        VVJSONSchemaFactory *factory = [VVJSONSchemaFactory factoryWithScopeURI:baseURI keywordsMapping:keywordsMapping specification:specification];
         schema = [factory schemaWithDictionary:schemaDictionary error:&internalError];
         
         if (schema != nil) {
@@ -160,11 +167,11 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
     }
 }
 
-+ (instancetype)schemaWithData:(NSData *)schemaData baseURI:(NSURL *)baseURI referenceStorage:(VVJSONSchemaStorage *)referenceStorage error:(NSError *__autoreleasing *)error
++ (instancetype)schemaWithData:(NSData *)schemaData baseURI:(NSURL *)baseURI referenceStorage:(VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError *__autoreleasing *)error
 {
     id object = [NSJSONSerialization JSONObjectWithData:schemaData options:(NSJSONReadingOptions)0 error:error];
     if ([object isKindOfClass:[NSDictionary class]]) {
-        return [self schemaWithDictionary:object baseURI:baseURI referenceStorage:referenceStorage error:error];
+        return [self schemaWithDictionary:object baseURI:baseURI referenceStorage:referenceStorage specification:specification error:error];
     } else if (object != nil) {
         // schema object must be a dictionary
         if (error != NULL) {

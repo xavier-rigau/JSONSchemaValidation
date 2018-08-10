@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VVJSONSchemaSpecification.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, strong) NSURL *scopeURI;
 /** Keywords mapping used to create validators for the schema. */
 @property (nonatomic, readonly, copy) NSDictionary<NSString *, Class> *keywordsMapping;
+/** Schema specification version. */
+@property (readonly, strong, nonatomic) VVJSONSchemaSpecification *specification;
 
 /**
  Creates a root factory object with specified base resolution scope URI and keywords mapping.
@@ -29,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param keywordsMapping Keyword to validator class mapping to be used for the schemas created using the factory and its derived factories.
  @discussion This method is invoked by the root schema instantiation process, you don't need to invoke it yourself.
  */
-+ (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping;
++ (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping specification:(VVJSONSchemaSpecification *)specification;
 
 /**
  Creates and returns a new factory object with the specified resolution scope and the same keywords mapping as the receiver.

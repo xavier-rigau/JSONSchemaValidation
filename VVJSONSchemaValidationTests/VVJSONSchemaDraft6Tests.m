@@ -49,7 +49,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     // load all test cases
     NSMutableArray<VVJSONSchemaTestCase *> *testSuite = [NSMutableArray array];
     for (NSURL *url in urls) {
-        NSArray<VVJSONSchemaTestCase *> *testCases = [VVJSONSchemaTestCase testCasesWithContentsOfURL:url];
+        NSArray<VVJSONSchemaTestCase *> *testCases = [VVJSONSchemaTestCase testCasesWithContentsOfURL:url specification:[self.class specification]];
         if (testCases != nil) {
             [testSuite addObjectsFromArray:testCases];
         } else {
@@ -63,6 +63,11 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     _referenceStorage = [self.class remoteSchemasReferenceStorage];
     
     NSLog(@"Loaded %lu test cases.", (unsigned long)testSuite.count);
+}
+
++ (VVJSONSchemaSpecification *)specification
+{
+    return [VVJSONSchemaSpecification draft6];
 }
 
 + (VVJSONSchemaStorage *)remoteSchemasReferenceStorage
@@ -92,7 +97,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 + (void)addSchemaFromURL:(NSURL *)url withScopeURI:(NSURL *)scopeURI intoStorage:(VVMutableJSONSchemaStorage *)storage
 {
     NSData *schemaData = [NSData dataWithContentsOfURL:url];
-    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil error:NULL];
+    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil specification:[VVJSONSchemaSpecification draft6] error:NULL];
     if (schema == nil) {
         [NSException raise:NSInternalInconsistencyException format:@"Failed to instantiate reference schema from %@.", url];
     }

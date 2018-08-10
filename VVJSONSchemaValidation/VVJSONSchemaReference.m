@@ -10,12 +10,12 @@
 
 @implementation VVJSONSchemaReference
 
-- (instancetype)initWithScopeURI:(NSURL *)uri referenceURI:(NSURL *)referenceURI
+- (instancetype)initWithScopeURI:(NSURL *)uri referenceURI:(NSURL *)referenceURI specification:(VVJSONSchemaSpecification *)specification
 {
     NSParameterAssert(uri);
     NSParameterAssert(referenceURI);
     
-    self = [super initWithScopeURI:uri title:nil description:nil validators:nil subschemas:nil];
+    self = [super initWithScopeURI:uri title:nil description:nil validators:nil subschemas:nil specification:specification];
     if (self) {
         _referenceURI = referenceURI;
     }

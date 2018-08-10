@@ -49,7 +49,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     // load all test cases
     NSMutableArray<VVJSONSchemaTestCase *> *testSuite = [NSMutableArray array];
     for (NSURL *url in urls) {
-        NSArray<VVJSONSchemaTestCase *> *testCases = [VVJSONSchemaTestCase testCasesWithContentsOfURL:url];
+        NSArray<VVJSONSchemaTestCase *> *testCases = [VVJSONSchemaTestCase testCasesWithContentsOfURL:url specification:[self.class specification]];
         if (testCases != nil) {
             [testSuite addObjectsFromArray:testCases];
         } else {
@@ -63,6 +63,11 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     _referenceStorage = [self.class remoteSchemasReferenceStorage];
     
     NSLog(@"Loaded %lu test cases.", (unsigned long)testSuite.count);
+}
+
++ (VVJSONSchemaSpecification *)specification
+{
+    return [VVJSONSchemaSpecification draft4];
 }
 
 + (VVJSONSchemaStorage *)remoteSchemasReferenceStorage
@@ -92,7 +97,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 + (void)addSchemaFromURL:(NSURL *)url withScopeURI:(NSURL *)scopeURI intoStorage:(VVMutableJSONSchemaStorage *)storage
 {
     NSData *schemaData = [NSData dataWithContentsOfURL:url];
-    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil error:NULL];
+    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil specification:[self specification] error:NULL];
     if (schema == nil) {
         [NSException raise:NSInternalInconsistencyException format:@"Failed to instantiate reference schema from %@.", url];
     }
@@ -137,7 +142,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 - (void)testPerformance
 {
     NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"advanced-example" withExtension:@"json" subdirectory:@"draft4"];
-    VVJSONSchemaTestCase *testCase = [[VVJSONSchemaTestCase testCasesWithContentsOfURL:url] firstObject];
+    VVJSONSchemaTestCase *testCase = [[VVJSONSchemaTestCase testCasesWithContentsOfURL:url specification:[self.class specification]] firstObject];
 
     CFTimeInterval startTime = CACurrentMediaTime();
     BOOL success = [testCase instantiateSchemaWithReferenceStorage:nil error:NULL];
@@ -173,12 +178,12 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     dispatch_queue_t queue = dispatch_queue_create("com.argentumko.VVJSONSchemaTests.Parallelism", DISPATCH_QUEUE_CONCURRENT);
 
     NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"advanced-example" withExtension:@"json" subdirectory:@"draft4"];
-    VVJSONSchemaTestCase *testCase = [[VVJSONSchemaTestCase testCasesWithContentsOfURL:url] firstObject];
+    VVJSONSchemaTestCase *testCase = [[VVJSONSchemaTestCase testCasesWithContentsOfURL:url specification:[self.class specification]] firstObject];
     NSDictionary<NSString *, id> *schemaObject = testCase.schemaObject;
     
     for (NSUInteger parallelism = 0; parallelism < 10; parallelism++) {
         dispatch_async(queue, ^{
-            VVJSONSchema *schema = [VVJSONSchema schemaWithDictionary:schemaObject baseURI:nil referenceStorage:self->_referenceStorage error:NULL];
+            VVJSONSchema *schema = [VVJSONSchema schemaWithDictionary:schemaObject baseURI:nil referenceStorage:self->_referenceStorage specification:[self.class specification] error:NULL];
             XCTAssertNotNil(schema);
         });
     }
