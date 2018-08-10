@@ -41,7 +41,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     [super setUp];
 
     // prepare URLs of test cases
-    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"draft6"];
+    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"draft6-wip"];
     if (urls.count == 0) {
         XCTFail(@"No JSON test cases found.");
     }
