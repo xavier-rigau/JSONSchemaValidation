@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)resolveReferenceWithSchema:(VVJSONSchema *)schema;
 
++ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
++ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -17,7 +17,10 @@ typedef NS_ENUM(NSUInteger, VVJSONSchemaSpecificationVersion) {
 
 @interface VVJSONSchemaSpecification : NSObject
 
-@property (readonly, assign, nonatomic) VVJSONSchemaSpecificationVersion version;
+@property (nonatomic, readonly, assign, ) VVJSONSchemaSpecificationVersion version;
+@property (nonatomic, readonly, strong) NSURL *defaultMetaschemaURI;
+@property (nonatomic, readonly, copy) NSSet<NSURL *> *supportedMetaschemaURIs;
+@property (nonatomic, readonly, copy) NSSet<NSURL *> *unsupportedMetaschemaURIs;
 
 + (instancetype)draft4;
 + (instancetype)draft6;

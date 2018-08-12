@@ -68,6 +68,14 @@ static NSString * const kSchemaKeywordDependencies = @"dependencies";
                 success = NO;
             }
         } else if ([dependencyObject isKindOfClass:[NSArray class]]) {
+            if (schemaFactory.specification.version == VVJSONSchemaSpecificationVersionDraft6) {
+                if (((NSArray *)dependencyObject).count == 0) {
+                    *stop = YES;
+                    success = YES;
+                    return;
+                }
+            }
+            
             // dependency object is an array - parse it as a property dependency;
             // each property names array must be non-empty and contain unique strings
             for (id dependentProperty in dependencyObject) {

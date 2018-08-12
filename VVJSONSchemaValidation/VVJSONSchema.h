@@ -14,8 +14,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class VVJSONSchemaValidationContext;
-
 /**
  Defines an object describing a JSON Schema, capable of validating objects against its configuration.
  @discussion Basic setup of this class allows validating JSON-decoded objects with schemas authored in JSON Schema, draft 4 format. To create a schema object, use one of the provided factory methods, specifying the root schema object to parse, either JSON-encoded or decoded. Note that creating schema objects is a resource-heavy process, so created schemas should be cached as possible.
@@ -47,17 +45,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, nullable, readonly, copy) NSArray<VVJSONSchema *> *subschemas;
 
+@property (nonatomic, strong) VVJSONSchemaSpecification *specification;
+
 /**
- Creates and returns a schema configured using a dictionary containing the JSON Schema representation.
- @param schemaDictionary Dictionary containing the JSON Schema representation.
- @param baseURI Optional base resolution scope URI of the created schema (e.g., URL the schema was loaded from). Resolution scope of the created schema may be overriden by "id" property of the schema.
+ Creates and returns a schema configured using a Foundation object (NSDictionary, NSNumber, ...) containing the JSON Schema representation.
+ @param foundationObject Foundation object the JSON Schema representation. @param baseURI Optional base resolution scope URI of the created schema (e.g., URL the schema was loaded from). Resolution scope of the created schema may be overriden by "id" property of the schema.
  @param referenceStorage Optional schema storage to resolve external references. This storage must contain all external schemas referenced by the instantiated schema (if there are any), otherwise instantiation will fail.
  @param error Error object to contain any error encountered during instantiation of the schema.
  @return Configured schema object, or nil if an error occurred.
  */
-+ (nullable instancetype)schemaWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
++ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
 /**
- Acts similarly to `+schemaWithDictionary:baseURI:referenceStorage:error:`, but retrieves the schema dictionary from the specified JSON-encoded data.
+ Acts similarly to `+schemaWithDictionary:baseURI:referenceStorage:error:`, but retrieves the schema object from the specified JSON-encoded data.
  */
 + (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
 
@@ -108,7 +107,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param error Error object to contain any error encountered during registration of the validator class.
  @return YES, if validator class has been registered successfully, otherwise NO.
  */
-+ (BOOL)registerValidatorClass:(Class<VVJSONSchemaValidator>)validatorClass forMetaschemaURI:(nullable NSURL *)metaschemaURI withError:(NSError * __autoreleasing *)error;
++ (BOOL)registerValidatorClass:(Class<VVJSONSchemaValidator>)validatorClass forMetaschemaURI:(nullable NSURL *)metaschemaURI specification:(VVJSONSchemaSpecification *)specification withError:(NSError * __autoreleasing *)error;
 
 @end
 

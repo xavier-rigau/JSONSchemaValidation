@@ -8,6 +8,7 @@
 
 #import "VVJSONSchemaFactory.h"
 #import "VVJSONSchemaReference.h"
+#import "VVJSONDictionarySchema.h"
 #import "NSURL+VVJSONReferencing.h"
 #import "NSString+VVJSONPointer.h"
 
@@ -183,7 +184,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
     }
     
     // finally, instantiate the schema itself
-    VVJSONSchema *schema = [[VVJSONSchema alloc] initWithScopeURI:effectiveFactory.scopeURI title:title description:description validators:validators subschemas:unboundSubschemas specification:self.specification];
+    VVJSONDictionarySchema *schema = [[VVJSONDictionarySchema alloc] initWithScopeURI:effectiveFactory.scopeURI title:title description:description validators:validators subschemas:unboundSubschemas specification:self.specification];
     
     return schema;
 }

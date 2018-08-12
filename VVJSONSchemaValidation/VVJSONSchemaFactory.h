@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** Keywords mapping used to create validators for the schema. */
 @property (nonatomic, readonly, copy) NSDictionary<NSString *, Class> *keywordsMapping;
 /** Schema specification version. */
-@property (readonly, strong, nonatomic) VVJSONSchemaSpecification *specification;
+@property (nonatomic, readonly, strong) VVJSONSchemaSpecification *specification;
 
 /**
  Creates a root factory object with specified base resolution scope URI and keywords mapping.
