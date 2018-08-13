@@ -8,6 +8,8 @@
 
 #import "VVJSONSchemaNumericValidator.h"
 #import "VVJSONSchemaErrors.h"
+#import "VVJSONSchemaFactory.h"
+#import "VVJSONSchemaSpecification.h"
 #import "NSNumber+VVJSONNumberTypes.h"
 
 @implementation VVJSONSchemaNumericValidator
@@ -44,7 +46,7 @@ static NSString * const kSchemaKeywordExclusiveMinimum = @"exclusiveMinimum";
 
 + (instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(__unused VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
 {
-    if ([self validateSchemaFormat:schemaDictionary] == NO) {
+    if ([self validateSchemaFormat:schemaDictionary specification:schemaFactory.specification] == NO) {
         if (error != NULL) {
             *error = [NSError vv_JSONSchemaErrorWithCode:VVJSONSchemaErrorCodeInvalidSchemaFormat failingObject:schemaDictionary];
         }
@@ -53,9 +55,20 @@ static NSString * const kSchemaKeywordExclusiveMinimum = @"exclusiveMinimum";
     
     NSNumber *multipleOf = schemaDictionary[kSchemaKeywordMultipleOf];
     NSNumber *maximum = schemaDictionary[kSchemaKeywordMaximum];
-    NSNumber *exclusiveMaximum = schemaDictionary[kSchemaKeywordExclusiveMaximum] ?: @NO;
     NSNumber *minimum = schemaDictionary[kSchemaKeywordMinimum];
-    NSNumber *exclusiveMinimum = schemaDictionary[kSchemaKeywordExclusiveMinimum] ?: @NO;
+    NSNumber *exclusiveMaximum = nil;
+    NSNumber *exclusiveMinimum = nil;
+    
+    if (schemaFactory.specification.version == VVJSONSchemaSpecificationVersionDraft4) {
+        exclusiveMaximum = schemaDictionary[kSchemaKeywordExclusiveMaximum] ?: @NO;
+        exclusiveMinimum = schemaDictionary[kSchemaKeywordExclusiveMinimum] ?: @NO;
+    }
+    else {
+        maximum = schemaDictionary[kSchemaKeywordExclusiveMaximum];
+        exclusiveMaximum = maximum ? @YES : @NO;
+        minimum = schemaDictionary[kSchemaKeywordExclusiveMinimum];
+        exclusiveMinimum = minimum ? @YES : @NO;
+    }
     
     // to avoid floating-point precision errors, multiplier is converted to a decimal number
     NSDecimalNumber *multipleOfDecimal = multipleOf != nil ? [NSDecimalNumber decimalNumberWithString:[multipleOf stringValue]] : nil;
@@ -65,7 +78,7 @@ static NSString * const kSchemaKeywordExclusiveMinimum = @"exclusiveMinimum";
     return validator;
 }
 
-+ (BOOL)validateSchemaFormat:(NSDictionary<NSString *, id> *)schemaDictionary
++ (BOOL)validateSchemaFormat:(NSDictionary<NSString *, id> *)schemaDictionary specification:(VVJSONSchemaSpecification *)specification
 {
     id multipleOf = schemaDictionary[kSchemaKeywordMultipleOf];
     id maximum = schemaDictionary[kSchemaKeywordMaximum];
@@ -91,26 +104,54 @@ static NSString * const kSchemaKeywordExclusiveMinimum = @"exclusiveMinimum";
             return NO;
         }
     }
-    // exclusiveMaximum must be a boolean number
     if (exclusiveMaximum != nil) {
-        if ([exclusiveMaximum isKindOfClass:[NSNumber class]] == NO || [exclusiveMaximum vv_isBoolean] == NO) {
-            return NO;
+        if (specification.version == VVJSONSchemaSpecificationVersionDraft4) {
+            // exclusiveMaximum must be a number and not a boolean
+            if ([exclusiveMaximum isKindOfClass:[NSNumber class]] == NO || [exclusiveMaximum vv_isBoolean] == NO) {
+                return NO;
+            }
+        }
+        else {
+            // exclusiveMaximum must be a boolean number
+            if ([exclusiveMaximum isKindOfClass:[NSNumber class]] == NO || [exclusiveMaximum vv_isBoolean]) {
+                return NO;
+            }
         }
     }
-    // exclusiveMinimum must be a boolean number
     if (exclusiveMinimum != nil) {
-        if ([exclusiveMinimum isKindOfClass:[NSNumber class]] == NO || [exclusiveMinimum vv_isBoolean] == NO) {
-            return NO;
+        if (specification.version == VVJSONSchemaSpecificationVersionDraft4) {
+            // exclusiveMinimum must be a number and not a boolean
+            if ([exclusiveMinimum isKindOfClass:[NSNumber class]] == NO || [exclusiveMinimum vv_isBoolean] == NO) {
+                return NO;
+            }
+        }
+        else {
+            // exclusiveMinimum must be a boolean number
+            if ([exclusiveMinimum isKindOfClass:[NSNumber class]] == NO || [exclusiveMinimum vv_isBoolean]) {
+                return NO;
+            }
         }
     }
     
-    // if exclusiveMaximum is present, maximum must also be present
-    if (exclusiveMaximum != nil && maximum == nil) {
-        return NO;
+    if (specification.version == VVJSONSchemaSpecificationVersionDraft4) {
+        // if exclusiveMaximum is present, maximum must also be present
+        if (exclusiveMaximum != nil && maximum == nil) {
+            return NO;
+        }
+        // if exclusiveMinimum is present, minimum must also be present
+        if (exclusiveMinimum != nil && minimum == nil) {
+            return NO;
+        }
     }
-    // if exclusiveMinimum is present, minimum must also be present
-    if (exclusiveMinimum != nil && minimum == nil) {
-        return NO;
+    else {
+        // if exclusiveMaximum is present, maximum must not be present
+        if (exclusiveMaximum != nil && maximum != nil) {
+            return NO;
+        }
+        // if exclusiveMinimum is present, minimum must not be present
+        if (exclusiveMinimum != nil && minimum != nil) {
+            return NO;
+        }
     }
     
     return YES;
