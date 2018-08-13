@@ -19,6 +19,7 @@
 #import "VVJSONSchemaDependenciesValidator.h"
 #import "VVJSONSchemaCombiningValidator.h"
 #import "VVJSONSchemaFormatValidator.h"
+#import "VVJSONSchemaConstValidator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
