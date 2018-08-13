@@ -8,6 +8,8 @@
 
 #import "VVJSONSchemaObjectValidator.h"
 #import "VVJSONSchemaErrors.h"
+#import "VVJSONSchemaFactory.h"
+#import "VVJSONSchemaSpecification.h"
 #import "NSNumber+VVJSONNumberTypes.h"
 
 @implementation VVJSONSchemaObjectValidator
@@ -39,9 +41,9 @@ static NSString * const kSchemaKeywordRequired = @"required";
     return [NSSet setWithArray:@[ kSchemaKeywordMaxProperties, kSchemaKeywordMinProperties, kSchemaKeywordRequired ]];
 }
 
-+ (instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(__unused VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
++ (instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
 {
-    if ([self validateSchemaFormat:schemaDictionary] == NO) {
+    if ([self validateSchemaFormat:schemaDictionary specification:schemaFactory.specification] == NO) {
         if (error != NULL) {
             *error = [NSError vv_JSONSchemaErrorWithCode:VVJSONSchemaErrorCodeInvalidSchemaFormat failingObject:schemaDictionary];
         }
@@ -59,7 +61,7 @@ static NSString * const kSchemaKeywordRequired = @"required";
     return [[self alloc] initWithMaximumProperties:maxPropertiesValue minimumProperties:minPropertiesValue requiredProperties:requiredSet];
 }
 
-+ (BOOL)validateSchemaFormat:(NSDictionary<NSString *, id> *)schemaDictionary
++ (BOOL)validateSchemaFormat:(NSDictionary<NSString *, id> *)schemaDictionary specification:(VVJSONSchemaSpecification *)specification
 {
     id maxProperties = schemaDictionary[kSchemaKeywordMaxProperties];
     id minProperties = schemaDictionary[kSchemaKeywordMinProperties];
@@ -79,7 +81,17 @@ static NSString * const kSchemaKeywordRequired = @"required";
     }
     // required must be a non-empty array of unique strings
     if (required != nil) {
-        if ([required isKindOfClass:[NSArray class]] == NO || [required count] == 0) {
+        if ([required isKindOfClass:[NSArray class]] == NO) {
+            return NO;
+        }
+        
+        if (specification.version == VVJSONSchemaSpecificationVersionDraft6) {
+            if ([required count] == 0) {
+                return YES;
+            }
+        }
+        
+        if ([required count] == 0) {
             return NO;
         }
         

@@ -61,7 +61,7 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
     @autoreleasepool {
         // instantiate a root schema factory and use it to create the schema
         VVJSONSchemaFactory *factory = [VVJSONSchemaFactory factoryWithScopeURI:scopeURI keywordsMapping:keywordsMapping specification:specification];
-        schema = [factory schemaWithDictionary:schemaDictionary error:&internalError];
+        schema = [factory schemaWithObject:schemaDictionary error:&internalError];
         
         if (schema != nil) {
             // create a schema storage to resolve references

@@ -21,6 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable instancetype)schemaWithNumber:(NSNumber *)schemaNumber baseURI:(nullable NSURL *)baseURI specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
 
+/**
+ Designated initializer
+ */
+- (instancetype)initWithScopeURI:(NSURL *)uri schemaValue:(BOOL)schemaValue specification:(VVJSONSchemaSpecification *)specification;
+
 + (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
 + (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
 

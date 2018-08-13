@@ -10,6 +10,8 @@
 #import "VVJSONSchema.h"
 #import "VVJSONSchemaFactory.h"
 #import "VVJSONSchemaErrors.h"
+#import "NSNumber+VVJSONNumberTypes.h"
+#import "VVJSONBooleanSchema.h"
 
 @implementation VVJSONSchemaDependenciesValidator
 
@@ -55,12 +57,13 @@ static NSString * const kSchemaKeywordDependencies = @"dependencies";
     __block BOOL success = YES;
     __block NSError *internalError = nil;
     [dependencies enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, id dependencyObject, BOOL *stop) {
-        if ([dependencyObject isKindOfClass:[NSDictionary class]]) {
-            // dependency object is a dictionary - parse it as a schema dependency;
+        if ([dependencyObject isKindOfClass:[NSDictionary class]] ||
+            [dependencyObject isKindOfClass:[NSNumber class]]) {
+            // dependency object is a dictionary or boolean - parse it as a schema dependency;
             // schema will have scope extended by "/dependencies/#" where # is dependent property name
             VVJSONSchemaFactory *dependencySchemaFactory = [schemaFactory factoryByAppendingScopeComponentsFromArray:@[ kSchemaKeywordDependencies, propertyName ]];
             
-            VVJSONSchema *dependencySchema = [dependencySchemaFactory schemaWithDictionary:dependencyObject error:&internalError];
+            VVJSONSchema *dependencySchema = [dependencySchemaFactory schemaWithObject:dependencyObject error:&internalError];
             if (dependencySchema != nil) {
                 schemaDependencies[propertyName] = dependencySchema;
             } else {

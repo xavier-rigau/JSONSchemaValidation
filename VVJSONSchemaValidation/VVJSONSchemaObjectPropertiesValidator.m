@@ -67,11 +67,12 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
         __block NSError *internalError = nil;
         [propertiesObject enumerateKeysAndObjectsUsingBlock:^(NSString *property, id schemaObject, BOOL *stop) {
             // schema object must be a dictionary
-            if ([schemaObject isKindOfClass:[NSDictionary class]]) {
+            if ([schemaObject isKindOfClass:[NSDictionary class]] ||
+                [schemaObject isKindOfClass:[NSNumber class]]) {
                 // each schema will have scope extended by "/properties/#" where # is property name
                 VVJSONSchemaFactory *propertySchemaFactory = [schemaFactory factoryByAppendingScopeComponentsFromArray:@[ kSchemaKeywordProperties, property ]];
                 
-                VVJSONSchema *propertySchema = [propertySchemaFactory schemaWithDictionary:schemaObject error:&internalError];
+                VVJSONSchema *propertySchema = [propertySchemaFactory schemaWithObject:schemaObject error:&internalError];
                 if (propertySchema != nil) {
                     schemas[property] = propertySchema;
                 } else {
@@ -110,7 +111,7 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
         // parse as a schema object; schema will have scope extended by "/additionalProperties"
         VVJSONSchemaFactory *additionalSchemaFactory = [schemaFactory factoryByAppendingScopeComponent:kSchemaKeywordAdditionalProperties];
         
-        additionalPropertiesSchema = [additionalSchemaFactory schemaWithDictionary:additionalPropertiesObject error:error];
+        additionalPropertiesSchema = [additionalSchemaFactory schemaWithObject:additionalPropertiesObject error:error];
         if (additionalPropertiesSchema == nil) {
             return nil;
         }
@@ -135,7 +136,8 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
         __block NSError *internalError = nil;
         [patternPropertiesObject enumerateKeysAndObjectsUsingBlock:^(NSString *pattern, id schemaObject, BOOL *stop) {
             // schema object must be a dictionary
-            if ([schemaObject isKindOfClass:[NSDictionary class]]) {
+            if ([schemaObject isKindOfClass:[NSDictionary class]] ||
+                [schemaObject isKindOfClass:[NSNumber class]]) {
                 // pattern must be a valid regular expression
                 NSError *underlyingError;
                 NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:(NSRegularExpressionOptions)0 error:&underlyingError];
@@ -143,7 +145,7 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
                     // each schema will have scope extended by "/patternProperties/#" where # is the pattern
                     VVJSONSchemaFactory *propertySchemaFactory = [schemaFactory factoryByAppendingScopeComponentsFromArray:@[ kSchemaKeywordPatternProperties, pattern ]];
                     
-                    VVJSONSchema *propertySchema = [propertySchemaFactory schemaWithDictionary:schemaObject error:&internalError];
+                    VVJSONSchema *propertySchema = [propertySchemaFactory schemaWithObject:schemaObject error:&internalError];
                     if (propertySchema != nil) {
                         schemas[regexp] = propertySchema;
                     } else {
