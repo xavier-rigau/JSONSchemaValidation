@@ -16,7 +16,7 @@
     NSArray<Class<VVJSONSchemaValidator>> *draft4ValidatorClasses = @[ [VVJSONSchemaDefinitions class], [VVJSONSchemaTypeValidator class], [VVJSONSchemaEnumValidator class], [VVJSONSchemaNumericValidator class], [VVJSONSchemaStringValidator class], [VVJSONSchemaArrayValidator class], [VVJSONSchemaArrayItemsValidator class], [VVJSONSchemaObjectValidator class], [VVJSONSchemaObjectPropertiesValidator class], [VVJSONSchemaDependenciesValidator class], [VVJSONSchemaCombiningValidator class], [VVJSONSchemaFormatValidator class] ];
     
     NSMutableArray<Class<VVJSONSchemaValidator>> *draft6ValidatorClasses = [draft4ValidatorClasses mutableCopy];
-    [draft6ValidatorClasses addObjectsFromArray:@[ [VVJSONSchemaConstValidator class], [VVJSONSchemaContainsValidator class] ]];
+    [draft6ValidatorClasses addObjectsFromArray:@[ [VVJSONSchemaConstValidator class], [VVJSONSchemaContainsValidator class], [VVJSONSchemaPropertyNamesValidator class] ]];
     
     for (Class<VVJSONSchemaValidator> validatorClass in draft4ValidatorClasses) {
         if ([self registerValidatorClass:validatorClass forMetaschemaURI:nil specification:[VVJSONSchemaSpecification draft4]  withError:NULL] == NO) {
