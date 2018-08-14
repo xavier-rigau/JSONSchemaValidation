@@ -64,10 +64,14 @@ static NSString * const kSchemaKeywordExclusiveMinimum = @"exclusiveMinimum";
         exclusiveMinimum = schemaDictionary[kSchemaKeywordExclusiveMinimum] ?: @NO;
     }
     else {
-        maximum = schemaDictionary[kSchemaKeywordExclusiveMaximum];
-        exclusiveMaximum = maximum ? @YES : @NO;
-        minimum = schemaDictionary[kSchemaKeywordExclusiveMinimum];
-        exclusiveMinimum = minimum ? @YES : @NO;
+        if (!maximum) {
+            maximum = schemaDictionary[kSchemaKeywordExclusiveMaximum];
+            exclusiveMaximum = maximum ? @YES : @NO;
+        }
+        if (!minimum) {
+            minimum = schemaDictionary[kSchemaKeywordExclusiveMinimum];
+            exclusiveMinimum = minimum ? @YES : @NO;
+        }
     }
     
     // to avoid floating-point precision errors, multiplier is converted to a decimal number
