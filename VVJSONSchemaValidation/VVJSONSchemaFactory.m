@@ -93,17 +93,15 @@ static NSString * const kSchemaKeywordReference = @"$ref";
         if (schemaReferenceString != nil) {
             NSURL *referenceURI = [self.class schemaReferenceURIWithJSONReference:schemaReferenceString scope:self.scopeURI];
             if (referenceURI != nil) {
-                NSArray<VVJSONSchema *> *unboundSubschemas = nil;
-                if (self.specification.version == VVJSONSchemaSpecificationVersionDraft6) {
-                    NSMutableSet<NSString *> *remainingKeys = [NSMutableSet setWithArray:schemaDictionary.allKeys];
-                    [remainingKeys removeObject:kSchemaKeywordReference];
-                    [remainingKeys removeObject:schemaKeywordID];
-                    [remainingKeys removeObject:kSchemaKeywordTitle];
-                    [remainingKeys removeObject:kSchemaKeywordDescription];
-                    
-                    unboundSubschemas = [self unboundSubschemasFromDictionary:schemaDictionary remainingKeys:remainingKeys];
-                }
-            
+                NSMutableSet<NSString *> *remainingKeys = [NSMutableSet setWithArray:schemaDictionary.allKeys];
+                [remainingKeys minusSet:self.specification.keywords]; // $ref overrides any sibling keywords
+                [remainingKeys removeObject:kSchemaKeywordReference];
+                [remainingKeys removeObject:schemaKeywordID];
+                [remainingKeys removeObject:kSchemaKeywordTitle];
+                [remainingKeys removeObject:kSchemaKeywordDescription];
+                
+                NSArray<VVJSONSchema *> *unboundSubschemas = [self unboundSubschemasFromDictionary:schemaDictionary remainingKeys:remainingKeys];
+                
                 return [[VVJSONSchemaReference alloc] initWithScopeURI:self.scopeURI referenceURI:referenceURI subschemas:unboundSubschemas specification:self.specification];
             } else {
                 if (error != NULL) {

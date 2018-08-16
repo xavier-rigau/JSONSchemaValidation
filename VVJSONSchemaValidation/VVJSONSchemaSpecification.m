@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSURL *defaultMetaschemaURI;
 @property (nonatomic, copy) NSSet<NSURL *> *supportedMetaschemaURIs;
 @property (nonatomic, copy) NSSet<NSURL *> *unsupportedMetaschemaURIs;
+@property (nonatomic, copy) NSSet<NSString *> *keywords;
 
 @end
 
@@ -96,6 +97,54 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic pop
     }
     return _unsupportedMetaschemaURIs;
+}
+
+- (NSSet<NSString *> *)keywords {
+    if (!_keywords) {
+        switch (self.version) {
+            case VVJSONSchemaSpecificationVersionDraft4: {
+                _keywords = [NSSet setWithObjects:
+                             // object keywords
+                             @"properties",
+                             @"required",
+                             @"minProperties",
+                             @"maxProperties",
+                             @"dependencies",
+                             @"patternProperties",
+                             @"additionalProperties",
+                             // array keywords
+                             @"items",
+                             @"additionalItems",
+                             @"minItems",
+                             @"maxItems",
+                             @"uniqueItems",
+                             nil];
+                break;
+            }
+            case VVJSONSchemaSpecificationVersionDraft6: {
+                _keywords = [NSSet setWithObjects:
+                             // object keywords
+                             @"properties",
+                             @"required",
+                             @"minProperties",
+                             @"maxProperties",
+                             @"dependencies",
+                             @"patternProperties",
+                             @"additionalProperties",
+                             @"propertyNames",
+                             // array keywords
+                             @"items",
+                             @"additionalItems",
+                             @"minItems",
+                             @"maxItems",
+                             @"uniqueItems",
+                             @"contains",
+                             nil];
+                break;
+            }
+        }
+    }
+    return _keywords;
 }
 
 @end

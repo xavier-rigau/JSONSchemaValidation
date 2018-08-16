@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, VVJSONSchemaSpecificationVersion) {
 @property (nonatomic, readonly, strong) NSURL *defaultMetaschemaURI;
 @property (nonatomic, readonly, copy) NSSet<NSURL *> *supportedMetaschemaURIs;
 @property (nonatomic, readonly, copy) NSSet<NSURL *> *unsupportedMetaschemaURIs;
+@property (nonatomic, readonly, copy) NSSet<NSString *> *keywords;
 
 + (instancetype)draft4;
 + (instancetype)draft6;
