@@ -11,7 +11,6 @@
 		2A377C5F211C2F1200B0508F /* draft6 in Resources */ = {isa = PBXBuildFile; fileRef = 2A377C5E211C2F1200B0508F /* draft6 */; };
 		2A377C61211C2F6D00B0508F /* VVJSONSchemaDraft6Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A377C60211C2F6D00B0508F /* VVJSONSchemaDraft6Tests.m */; };
 		2A377C68211C300B00B0508F /* remotes in Resources */ = {isa = PBXBuildFile; fileRef = 2A377C67211C300B00B0508F /* remotes */; };
-		2A436DFA211CAA7D0004B104 /* draft6-wip in Resources */ = {isa = PBXBuildFile; fileRef = 2A436DF9211CAA7D0004B104 /* draft6-wip */; };
 		2A67AA8D211D5E85001A3290 /* VVJSONSchemaSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A67AA8C211D5E85001A3290 /* VVJSONSchemaSpecification.m */; };
 		2A67AA95211E0DE7001A3290 /* VVJSONSchemaSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A67AA8C211D5E85001A3290 /* VVJSONSchemaSpecification.m */; };
 		2A67AA96211E0DE7001A3290 /* VVJSONSchemaSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A67AA8C211D5E85001A3290 /* VVJSONSchemaSpecification.m */; };
@@ -363,7 +362,6 @@
 		2A377C5E211C2F1200B0508F /* draft6 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = draft6; sourceTree = "<group>"; };
 		2A377C60211C2F6D00B0508F /* VVJSONSchemaDraft6Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVJSONSchemaDraft6Tests.m; sourceTree = "<group>"; };
 		2A377C67211C300B00B0508F /* remotes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = remotes; sourceTree = "<group>"; };
-		2A436DF9211CAA7D0004B104 /* draft6-wip */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "draft6-wip"; sourceTree = "<group>"; };
 		2A67AA8B211D5E85001A3290 /* VVJSONSchemaSpecification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VVJSONSchemaSpecification.h; sourceTree = "<group>"; };
 		2A67AA8C211D5E85001A3290 /* VVJSONSchemaSpecification.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VVJSONSchemaSpecification.m; sourceTree = "<group>"; };
 		2A67AA99211EB045001A3290 /* VVJSONDictionarySchema.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VVJSONDictionarySchema.h; sourceTree = "<group>"; };
@@ -670,7 +668,6 @@
 				2A377C67211C300B00B0508F /* remotes */,
 				2A377C5C211C230000B0508F /* draft4 */,
 				2A377C5E211C2F1200B0508F /* draft6 */,
-				2A436DF9211CAA7D0004B104 /* draft6-wip */,
 			);
 			name = "Test Suite JSONs";
 			path = JSON;
@@ -947,7 +944,6 @@
 			files = (
 				2A377C68211C300B00B0508F /* remotes in Resources */,
 				2A377C5D211C230000B0508F /* draft4 in Resources */,
-				2A436DFA211CAA7D0004B104 /* draft6-wip in Resources */,
 				2A377C5F211C2F1200B0508F /* draft6 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
