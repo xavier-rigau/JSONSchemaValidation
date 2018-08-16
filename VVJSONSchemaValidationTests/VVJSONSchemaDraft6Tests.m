@@ -7,16 +7,12 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <QuartzCore/QuartzCore.h>
+#import "VVJSONSchemaBaseTests.h"
 #import "VVJSONSchema.h"
-#import "VVJSONSchemaFormatValidator.h"
 #import "VVJSONSchemaTestCase.h"
 
-extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
-
-@interface VVJSONSchemaDraft6Tests : XCTestCase
+@interface VVJSONSchemaDraft6Tests : VVJSONSchemaBaseTests
 {
-    VVJSONSchemaStorage *_referenceStorage;
     NSArray<VVJSONSchemaTestCase *> *_testSuite;
 }
 
@@ -24,16 +20,9 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 
 @implementation VVJSONSchemaDraft6Tests
 
-+ (void)setUp
++ (VVJSONSchemaSpecification *)specification
 {
-    [super setUp];
-    
-    // register custom format validators
-    NSRegularExpression *noDigitsRegex = [NSRegularExpression regularExpressionWithPattern:@"^[^\\d]*$" options:(NSRegularExpressionOptions)0 error:NULL];
-    [VVJSONSchemaFormatValidator registerFormat:@"com.argentumko.json.string-without-digits" withRegularExpression:noDigitsRegex error:NULL];
-    [VVJSONSchemaFormatValidator registerFormat:@"com.argentumko.json.uuid" withBlock:^BOOL(id instance) {
-        return [instance isKindOfClass:[NSString class]] == NO || [[NSUUID alloc] initWithUUIDString:instance] != nil;
-    } error:NULL];
+    return [VVJSONSchemaSpecification draft6];
 }
 
 - (void)setUp
@@ -59,56 +48,10 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     
     _testSuite = [testSuite copy];
     
-    // load reference schemas
-    _referenceStorage = [self.class remoteSchemasReferenceStorage];
-    
     NSLog(@"Loaded %lu test cases.", (unsigned long)testSuite.count);
 }
 
-+ (VVJSONSchemaSpecification *)specification
-{
-    return [VVJSONSchemaSpecification draft6];
-}
-
-+ (VVJSONSchemaStorage *)remoteSchemasReferenceStorage
-{
-    static NSString * const kBaseRemoteSchemasURIString = @"http://localhost:1234/";
-
-    VVMutableJSONSchemaStorage *storage = [VVMutableJSONSchemaStorage storage];
-    NSURL *baseRemoteSchemasURI = [NSURL URLWithString:kBaseRemoteSchemasURIString];
-    
-    NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"remotes"];
-    for (NSURL *url in urls) {
-        NSString *documentName = url.lastPathComponent;
-        NSURL *schemaURI = [NSURL URLWithString:documentName relativeToURL:baseRemoteSchemasURI];
-        [self addSchemaFromURL:url withScopeURI:schemaURI intoStorage:storage];
-    }
-    
-    NSArray<NSURL *> *subfolderURLs = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"remotes/folder"];
-    for (NSURL *url in subfolderURLs) {
-        NSString *documentName = url.lastPathComponent;
-        NSURL *schemaURI = [NSURL URLWithString:[@"folder" stringByAppendingPathComponent:documentName] relativeToURL:baseRemoteSchemasURI];
-        [self addSchemaFromURL:url withScopeURI:schemaURI intoStorage:storage];
-    }
-    
-    return [storage copy];
-}
-
-+ (void)addSchemaFromURL:(NSURL *)url withScopeURI:(NSURL *)scopeURI intoStorage:(VVMutableJSONSchemaStorage *)storage
-{
-    NSData *schemaData = [NSData dataWithContentsOfURL:url];
-    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil specification:[self specification] error:NULL];
-    if (schema == nil) {
-        [NSException raise:NSInternalInconsistencyException format:@"Failed to instantiate reference schema from %@.", url];
-    }
-    
-    BOOL success = [storage addSchema:schema];
-    if (success == NO) {
-        [NSException raise:NSInternalInconsistencyException format:@"Failed to add reference schema from %@ into the storage.", url];
-    }
-}
-
-- (void)testSchemasDraft6InstantiationOnly
+- (void)testSchemasInstantiationOnlyDraft6
 {
     [self measureBlock:^{
         NSError *error = nil;
@@ -119,7 +62,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     }];
 }
 
-- (void)testSchemasDraft6Validation
+- (void)testSchemasValidationDraft6
 {
     // have to instantiate the schemas first!
     for (VVJSONSchemaTestCase *testCase in _testSuite) {
