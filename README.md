@@ -1,14 +1,14 @@
 # VVJSONSchemaValidation
 
-**JSON Schema draft 4 parsing and validation library written in Objective-C.**
+**JSON Schema draft 4 and draft 6 parsing and validation library written in Objective-C.**
 
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CocoaPods](https://img.shields.io/cocoapods/v/VVJSONSchemaValidation.svg?maxAge=604800)]() [![CocoaPods](https://img.shields.io/cocoapods/p/VVJSONSchemaValidation.svg?maxAge=2592000)]() [![CocoaPods](https://img.shields.io/cocoapods/l/VVJSONSchemaValidation.svg?maxAge=2592000)]()
 
-`VVJSONSchemaValidation` is a library that provides a set of classes for parsing [JSON Schema draft 4](http://json-schema.org/documentation.html) documents into native Objective-C objects and subsequently using them to validate JSON documents.
+`VVJSONSchemaValidation` is a library that provides a set of classes for parsing [JSON Schema](http://json-schema.org/documentation.html) documents into native Objective-C objects and subsequently using them to validate JSON documents.
 
 The main feature of the library is an ability to "compile" the schema into a network of objects that describe that schema, so that it could be cached and reused for validation of multiple JSON documents in a performant manner, similar to the way `NSRegularExpression` and `NSDateFormatter` classes are used. One of the possible use cases of this library could be early validation of JSON response received from a web service, based on expectations described within the app in a form of JSON Schema.
 
-`VVJSONSchemaValidation` supports all validation keywords of JSON Schema draft 4. It is also possible to extend the functionality of the library by defining custom keywords to be used with specific metaschema URIs and custom formats for the `format` validation keyword. Note that JSON Schema draft 3 is not supported at the moment. There are also a few important limitations, including usage of external schema references, listed under [Caveats and limitations](#caveats-and-limitations).
+`VVJSONSchemaValidation` supports all validation keywords of JSON Schema draft 4 and draft 6. It is also possible to extend the functionality of the library by defining custom keywords to be used with specific metaschema URIs and custom formats for the `format` validation keyword. Note that JSON Schema draft 3 is not supported at the moment. There are also a few important limitations, including usage of external schema references, listed under [Caveats and limitations](#caveats-and-limitations).
 
 ## Requirements
 
@@ -76,11 +76,11 @@ After importing the library header/module, use `VVJSONSchema` class to construct
 ``` objective-c
 NSData *schemaData = [NSData dataWithContentsOfURL:mySchemaURL];
 NSError *error = nil;
-VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:nil referenceStorage:nil error:&error];
+VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:nil referenceStorage:nil specification:[VVJSONSchemaSpecification draft4] error:&error];
 ```
 ``` swift
 if let schemaData = NSData(contentsOfURL: mySchemaURL) {
-    let schema = try? VVJSONSchema(data: schemaData, baseURI: nil, referenceStorage: nil)
+    let schema = try? VVJSONSchema(data: schemaData, baseURI: nil, referenceStorage: nil, specification:VVJSONSchemaSpecification.draft4())
 }
 ```
 
@@ -91,13 +91,13 @@ NSData *schemaData = [NSData dataWithContentsOfURL:mySchemaURL];
 // note that this object might be not an NSDictionary if schema JSON is invalid
 NSDictionary *schemaJSON = [NSJSONSerialization JSONObjectWithData:schemaData options:0 error:NULL];
 NSError *error = nil;
-VVJSONSchema *schema = [VVJSONSchema schemaWithDictionary:schemaJSON baseURI:nil referenceStorage:nil error:&error];
+VVJSONSchema *schema = [VVJSONSchema schemaWithObject:schemaJSON baseURI:nil referenceStorage:nil specification:[VVJSONSchemaSpecification draft4] error:&error];
 ```
 ``` swift
 if let schemaData = NSData(contentsOfURL: mySchemaURL),
     schemaJSON = try? NSJSONSerialization.JSONObjectWithData(schemaData, options: [ ]),
     schemaDictionary = schemaJSON as? [String : AnyObject] {
-    let schema = try? VVJSONSchema(dictionary: schemaDictionary, baseURI: nil, referenceStorage: nil)
+    let schema = try? VVJSONSchema(object: schemaDictionary, baseURI: nil, referenceStorage: nil, specification: VVJSONSchemaSpecification.draft4())
 }
 ```
 
@@ -155,12 +155,12 @@ Resolving external schema references from network locations is deliberately not 
 // obviously, in a real application, data from a website must not be loaded synchronously like this
 NSURL *schemaBURL = [NSURL URLWithString:@"http://awesome.org/myHandySchema.json"];
 NSData *schemaBData = [NSData dataWithContentsOfURL:schemaBURL];
-VVJSONSchema *schemaB = [VVJSONSchema schemaWithData:schemaBData baseURI:schemaBURL referenceStorage:nil error:NULL];
+VVJSONSchema *schemaB = [VVJSONSchema schemaWithData:schemaBData baseURI:schemaBURL referenceStorage:nil specification:[VVJSONSchemaSpecification draft4] error:NULL];
 VVJSONSchemaStorage *referenceStorage = [VVJSONSchemaStorage storageWithSchema:schemaB];
 
 // ... retrieve schemaAData ...
 
-VVJSONSchema *schemaA = [VVJSONSchema schemaWithData:schemaAData baseURI:nil referenceStorage:referenceStorage error:NULL];
+VVJSONSchema *schemaA = [VVJSONSchema schemaWithData:schemaAData baseURI:nil referenceStorage:referenceStorage specification:[VVJSONSchemaSpecification draft4] error:NULL];
 ```
 
 `VVJSONSchemaStorage` objects can also be used in general to store schemas and retrieve them by their scope URI. Please refer to the documentation of that class in the source code for more information.
