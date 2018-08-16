@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Returns a schema configured using the contents of specified JSON dictionary.
  @discussion Note that returned schema may have a different resolution scope URI than the value of `scopeURI` property, if that schema alters its scope with an "id" property.
- @param schemaDictionary Dictionary containing the JSON Schema representation.
+ @param foundationObject Foundation object containing the JSON Schema representation.
  @param error Error object to contain any error encountered during schema instantiation.
  @return Configured schema instance, or nil if an error occurred.
  */
