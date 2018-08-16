@@ -24,6 +24,7 @@ static NSString * const kSchemaKeywordFormat = @"format";
         success &= [self registerFormat:@"email" withRegularExpression:[self emailRegularExpression] error:NULL];
         success &= [self registerFormat:@"hostname" withRegularExpression:[self hostnameRegularExpression] error:NULL];
         success &= [self registerFormat:@"uri" withRegularExpression:[self URIRegularExpression] error:NULL];
+        success &= [self registerFormat:@"uri-reference" withRegularExpression:[self URIReferenceRegularExpression] error:NULL];
 
         success &= [self registerFormat:@"ipv4" withBlock:[self IPv4AddressValidationBlock] error:NULL];
         success &= [self registerFormat:@"ipv6" withBlock:[self IPv6AddressValidationBlock] error:NULL];
@@ -283,6 +284,17 @@ static NSMutableDictionary<NSString *, VVJSONSchemaFormatValidatorBlock> *blockB
     @"(?::\\d{2,5})?"
     @"(?:[/?#]\\S*)?"
     @"$";
+    
+    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
+    NSAssert(regexp != nil, @"Format regular expression must be valid.");
+    
+    return regexp;
+}
+
++ (NSRegularExpression *)URIReferenceRegularExpression
+{
+    NSString *pattern =
+    @"^[A-Za-z][A-Za-z0-9+.-]*:(//(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|:)*@)?([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=])*(:[0-9]*)?(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*|/(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])+(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*)?|([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])+(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*|())(\\?(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])|[/?])*)?(#(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])|[/?])*)?|(//(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|:)*@)?([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=])*(:[0-9]*)?(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*|/(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])+(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*)?|([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|@)+(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*|())(\\?(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])|[/?])*)?(#(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])|[/?])*)?$";
     
     NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
     NSAssert(regexp != nil, @"Format regular expression must be valid.");
