@@ -93,7 +93,18 @@ static NSString * const kSchemaKeywordReference = @"$ref";
         if (schemaReferenceString != nil) {
             NSURL *referenceURI = [self.class schemaReferenceURIWithJSONReference:schemaReferenceString scope:self.scopeURI];
             if (referenceURI != nil) {
-                return [[VVJSONSchemaReference alloc] initWithScopeURI:self.scopeURI referenceURI:referenceURI specification:self.specification];
+                NSArray<VVJSONSchema *> *unboundSubschemas = nil;
+                if (self.specification.version == VVJSONSchemaSpecificationVersionDraft6) {
+                    NSMutableSet<NSString *> *remainingKeys = [NSMutableSet setWithArray:schemaDictionary.allKeys];
+                    [remainingKeys removeObject:kSchemaKeywordReference];
+                    [remainingKeys removeObject:kSchemaKeywordID];
+                    [remainingKeys removeObject:kSchemaKeywordTitle];
+                    [remainingKeys removeObject:kSchemaKeywordDescription];
+                    
+                    unboundSubschemas = [self unboundSubschemasFromDictionary:schemaDictionary remainingKeys:remainingKeys];
+                }
+            
+                return [[VVJSONSchemaReference alloc] initWithScopeURI:self.scopeURI referenceURI:referenceURI subschemas:unboundSubschemas specification:self.specification];
             } else {
                 if (error != NULL) {
                     *error = [NSError vv_JSONSchemaErrorWithCode:VVJSONSchemaErrorCodeInvalidSchemaReference failingObject:schemaDictionary];
@@ -167,26 +178,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
         [remainingKeys removeObject:kSchemaKeywordTitle];
         [remainingKeys removeObject:kSchemaKeywordDescription];
         
-        NSMutableArray<VVJSONSchema *> *unboundSubschemas = nil;
-        if (remainingKeys.count > 0) {
-            unboundSubschemas = [NSMutableArray arrayWithCapacity:remainingKeys.count];
-            for (NSString *key in remainingKeys) {
-                id subschemaObject = schemaDictionary[key];
-                // just skip non-dictionary objects
-                if ([subschemaObject isKindOfClass:[NSDictionary class]] == NO) {
-                    continue;
-                }
-                
-                // schema will have scope extended by the key
-                VVJSONSchemaFactory *subschemaFactory = [self factoryByAppendingScopeComponent:key];
-                VVJSONSchema *subschema = [subschemaFactory schemaWithObject:subschemaObject error:error];
-                if (subschema != nil) {
-                    [unboundSubschemas addObject:subschema];
-                } else {
-                    return nil;
-                }
-            }
-        }
+        NSArray<VVJSONSchema *> *unboundSubschemas = [self unboundSubschemasFromDictionary:schemaDictionary remainingKeys:remainingKeys];
         
         // finally, instantiate the schema itself
         VVJSONDictionarySchema *schema = [[VVJSONDictionarySchema alloc] initWithScopeURI:effectiveFactory.scopeURI title:title description:description validators:validators subschemas:unboundSubschemas specification:self.specification];
@@ -228,6 +220,35 @@ static NSString * const kSchemaKeywordReference = @"$ref";
         // fail if alteration is not a string, is empty, is an empty fragment or is not a valid URI
         return nil;
     }
+}
+
+- (nullable NSArray <VVJSONSchema *> *)unboundSubschemasFromDictionary:(NSDictionary <NSString *, id> *)schemaDictionary remainingKeys:(NSSet<NSString *> *)remainingKeys {
+    NSMutableArray<VVJSONSchema *> *unboundSubschemas = nil;
+    if (remainingKeys.count > 0) {
+        unboundSubschemas = [NSMutableArray arrayWithCapacity:remainingKeys.count];
+        for (NSString *key in remainingKeys) {
+            id subschemaObject = schemaDictionary[key];
+            // just skip non-dictionary and non-numbers objects
+            if ([subschemaObject isKindOfClass:[NSDictionary class]] == NO &&
+                [subschemaObject isKindOfClass:[NSNumber class]] == NO) {
+                continue;
+            }
+            
+            // schema will have scope extended by the key
+            VVJSONSchemaFactory *subschemaFactory = [self factoryByAppendingScopeComponent:key];
+            NSError *error = nil;
+            VVJSONSchema *subschema = [subschemaFactory schemaWithObject:subschemaObject error:&error];
+            if (subschema != nil) {
+                [unboundSubschemas addObject:subschema];
+            } else {
+#ifdef DEBUG
+                NSLog(@"Failed to create unbound schema with `schemaWithObject:error:` %@", error);
+#endif /* DEBUG */
+                return nil;
+            }
+        }
+    }
+    return [unboundSubschemas copy];
 }
 
 @end

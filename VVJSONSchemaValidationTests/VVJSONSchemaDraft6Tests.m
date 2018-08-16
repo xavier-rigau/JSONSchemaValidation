@@ -97,7 +97,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 + (void)addSchemaFromURL:(NSURL *)url withScopeURI:(NSURL *)scopeURI intoStorage:(VVMutableJSONSchemaStorage *)storage
 {
     NSData *schemaData = [NSData dataWithContentsOfURL:url];
-    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil specification:[VVJSONSchemaSpecification draft6] error:NULL];
+    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil specification:[self specification] error:NULL];
     if (schema == nil) {
         [NSException raise:NSInternalInconsistencyException format:@"Failed to instantiate reference schema from %@.", url];
     }

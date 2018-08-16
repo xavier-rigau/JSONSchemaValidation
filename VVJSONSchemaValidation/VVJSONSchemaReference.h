@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, weak) VVJSONSchema *referencedSchema;
 
 /** Initializes the receiver with scope URI and reference URI, leaving title, description and own set of validators as nil. */
-- (instancetype)initWithScopeURI:(NSURL *)uri referenceURI:(NSURL *)referenceURI specification:(VVJSONSchemaSpecification *)specification;
+- (instancetype)initWithScopeURI:(NSURL *)uri referenceURI:(NSURL *)referenceURI subschemas:(nullable NSArray<VVJSONSchema *> *)subschemas specification:(VVJSONSchemaSpecification *)specification;
 
 /**
  Resolves receiver's reference URI with the specified schema.
