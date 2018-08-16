@@ -16,7 +16,6 @@
 
 @implementation VVJSONSchemaFactory
 
-static NSString * const kSchemaKeywordID = @"id";
 static NSString * const kSchemaKeywordTitle = @"title";
 static NSString * const kSchemaKeywordDescription = @"description";
 static NSString * const kSchemaKeywordReference = @"$ref";
@@ -86,6 +85,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
 - (VVJSONSchema *)schemaWithObject:(id)foundationObject error:(NSError * __autoreleasing *)error
 {
     if ([foundationObject isKindOfClass:NSDictionary.class]) {
+        NSString *schemaKeywordID = self.specification.idKeyword;
         NSDictionary <NSString *, id> *schemaDictionary = foundationObject;
         
         // if schema object contains $ref, it's a schema reference - process that immediately
@@ -97,7 +97,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
                 if (self.specification.version == VVJSONSchemaSpecificationVersionDraft6) {
                     NSMutableSet<NSString *> *remainingKeys = [NSMutableSet setWithArray:schemaDictionary.allKeys];
                     [remainingKeys removeObject:kSchemaKeywordReference];
-                    [remainingKeys removeObject:kSchemaKeywordID];
+                    [remainingKeys removeObject:schemaKeywordID];
                     [remainingKeys removeObject:kSchemaKeywordTitle];
                     [remainingKeys removeObject:kSchemaKeywordDescription];
                     
@@ -114,7 +114,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
         }
         
         // retrieve altered resolution scope and construct a new factory if it's present
-        id alteredResolutionScopeString = schemaDictionary[kSchemaKeywordID];
+        id alteredResolutionScopeString = schemaDictionary[schemaKeywordID];
         VVJSONSchemaFactory *effectiveFactory;
         if (alteredResolutionScopeString != nil) {
             NSURL *alteredResolutionScopeURI = [self.class alteredResolutionScopeURIWithJSONAlteration:alteredResolutionScopeString currentScope:self.scopeURI];
@@ -174,7 +174,7 @@ static NSString * const kSchemaKeywordReference = @"$ref";
         // instantiate any remaining, unbound subschemas
         NSMutableSet<NSString *> *remainingKeys = [NSMutableSet setWithArray:schemaDictionary.allKeys];
         [remainingKeys minusSet:[NSSet setWithArray:keywordsMapping.allKeys]];
-        [remainingKeys removeObject:kSchemaKeywordID];
+        [remainingKeys removeObject:schemaKeywordID];
         [remainingKeys removeObject:kSchemaKeywordTitle];
         [remainingKeys removeObject:kSchemaKeywordDescription];
         

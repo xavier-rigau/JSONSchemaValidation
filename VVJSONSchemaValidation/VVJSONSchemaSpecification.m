@@ -39,6 +39,15 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+- (NSString *)idKeyword {
+    switch (self.version) {
+        case VVJSONSchemaSpecificationVersionDraft4:
+            return @"id";
+        case VVJSONSchemaSpecificationVersionDraft6:
+            return @"$id";
+    }
+}
+
 - (NSURL *)defaultMetaschemaURI
 {
     if (!_defaultMetaschemaURI) {
