@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  Creates a root factory object with specified base resolution scope URI and keywords mapping.
  @param scopeURI Base resolution scope URI of the factory.
  @param keywordsMapping Keyword to validator class mapping to be used for the schemas created using the factory and its derived factories.
+ @param specification Schema specification version. Serves as a configuration for validation process.
  @discussion This method is invoked by the root schema instantiation process, you don't need to invoke it yourself.
  */
 + (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping specification:(VVJSONSchemaSpecification *)specification;

@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
  Creates and returns a schema configured using a NSNumber (boolean) containing the JSON Schema representation.
  @param schemaNumber Number containing the Boolean JSON Schema representation.
  @param baseURI Optional base resolution scope URI of the created schema (e.g., URL the schema was loaded from). Resolution scope of the created schema may be overriden by "id" property of the schema.
+ @param specification Schema specification version. Serves as a configuration for validation process.
  @param error Error object to contain any error encountered during instantiation of the schema.
  @return Configured schema object, or nil if an error occurred.
  */

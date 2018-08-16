@@ -44,19 +44,20 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion These nested schemas are not used directly for validation, but they could be referenced by other schemas.
  */
 @property (nonatomic, nullable, readonly, copy) NSArray<VVJSONSchema *> *subschemas;
-
-@property (nonatomic, strong) VVJSONSchemaSpecification *specification;
+/** Schema specification version. */
+@property (nonatomic, readonly, strong) VVJSONSchemaSpecification *specification;
 
 /**
  Creates and returns a schema configured using a Foundation object (NSDictionary, NSNumber, ...) containing the JSON Schema representation.
  @param foundationObject Foundation object the JSON Schema representation. @param baseURI Optional base resolution scope URI of the created schema (e.g., URL the schema was loaded from). Resolution scope of the created schema may be overriden by "id" property of the schema.
  @param referenceStorage Optional schema storage to resolve external references. This storage must contain all external schemas referenced by the instantiated schema (if there are any), otherwise instantiation will fail.
+ @param specification Schema specification version. Serves as a configuration for validation process.
  @param error Error object to contain any error encountered during instantiation of the schema.
  @return Configured schema object, or nil if an error occurred.
  */
 + (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
 /**
- Acts similarly to `+schemaWithDictionary:baseURI:referenceStorage:error:`, but retrieves the schema object from the specified JSON-encoded data.
+ Acts similarly to `+schemaWithObject:baseURI:referenceStorage:specification:error:`, but retrieves the schema object from the specified JSON-encoded data.
  */
 + (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
 
