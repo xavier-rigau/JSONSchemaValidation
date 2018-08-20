@@ -22,6 +22,7 @@
 #import "VVJSONSchemaConstValidator.h"
 #import "VVJSONSchemaContainsValidator.h"
 #import "VVJSONSchemaPropertyNamesValidator.h"
+#import "VVJSONSchemaConditionalValidator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

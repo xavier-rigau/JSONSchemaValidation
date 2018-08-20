@@ -35,6 +35,8 @@ typedef NS_ENUM(NSUInteger, VVJSONSchemaSpecificationVersion) {
 + (instancetype)draft4;
 /** Creates JSON Schema draft 6 configuration object. */
 + (instancetype)draft6;
+/** Creates JSON Schema draft 7 configuration object. */
++ (instancetype)draft7;
 
 - (instancetype)init NS_UNAVAILABLE;
 

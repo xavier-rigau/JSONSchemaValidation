@@ -22,7 +22,7 @@
 
 + (VVJSONSchemaSpecification *)specification
 {
-    return [VVJSONSchemaSpecification draft6];
+    return [VVJSONSchemaSpecification draft7];
 }
 
 - (void)setUp
@@ -53,13 +53,13 @@
 
 - (void)testSchemasInstantiationOnlyDraft7
 {
-//    [self measureBlock:^{
+    [self measureBlock:^{
         NSError *error = nil;
         for (VVJSONSchemaTestCase *testCase in self->_testSuite) {
             BOOL success = [testCase instantiateSchemaWithReferenceStorage:self->_referenceStorage error:&error];
             XCTAssertTrue(success, @"Failed to instantiate schema for test case '%@': %@.", testCase.testCaseDescription, error);
         }
-//    }];
+    }];
 }
 
 - (void)testSchemasValidationDraft7
@@ -73,13 +73,13 @@
         }
     }
     
-//    [self measureBlock:^{
+    [self measureBlock:^{
         NSError *error = nil;
         for (VVJSONSchemaTestCase *testCase in self->_testSuite) {
             BOOL success = [testCase runTestsWithError:&error];
             XCTAssertTrue(success, @"Test case '%@' failed: '%@'.", testCase.testCaseDescription, error);
         }
-//    }];
+    }];
 }
 
 @end

@@ -37,7 +37,7 @@ static NSString * const kSchemaKeywordContains = @"contains";
     return [NSSet setWithObject:kSchemaKeywordContains];
 }
 
-+ (nullable instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(__unused VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
++ (nullable instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
 {
     id containsObject = schemaDictionary[kSchemaKeywordContains];
     NSError *internalError = nil;

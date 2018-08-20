@@ -37,7 +37,7 @@ static NSString * const kSchemaKeywordPropertyNames = @"propertyNames";
     return [NSSet setWithObject:kSchemaKeywordPropertyNames];
 }
 
-+ (nullable instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(__unused VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
++ (nullable instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
 {
     id propertyNamesObject = schemaDictionary[kSchemaKeywordPropertyNames];
     NSError *internalError = nil;

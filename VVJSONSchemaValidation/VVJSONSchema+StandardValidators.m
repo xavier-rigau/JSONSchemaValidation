@@ -18,6 +18,9 @@
     NSMutableArray<Class<VVJSONSchemaValidator>> *draft6ValidatorClasses = [draft4ValidatorClasses mutableCopy];
     [draft6ValidatorClasses addObjectsFromArray:@[ [VVJSONSchemaConstValidator class], [VVJSONSchemaContainsValidator class], [VVJSONSchemaPropertyNamesValidator class] ]];
     
+    NSMutableArray<Class<VVJSONSchemaValidator>> *draft7ValidatorClasses = [draft6ValidatorClasses mutableCopy];
+    [draft7ValidatorClasses addObject:[VVJSONSchemaConditionalValidator class]];
+    
     for (Class<VVJSONSchemaValidator> validatorClass in draft4ValidatorClasses) {
         if ([self registerValidatorClass:validatorClass forMetaschemaURI:nil specification:[VVJSONSchemaSpecification draft4]  withError:NULL] == NO) {
             [NSException raise:NSInternalInconsistencyException format:@"Failed to register standard JSON draft-04 Schema validators."];
@@ -26,6 +29,11 @@
     for (Class<VVJSONSchemaValidator> validatorClass in draft6ValidatorClasses) {
         if ([self registerValidatorClass:validatorClass forMetaschemaURI:nil specification:[VVJSONSchemaSpecification draft6]  withError:NULL] == NO) {
             [NSException raise:NSInternalInconsistencyException format:@"Failed to register standard JSON draft-06 Schema validators."];
+        }
+    }
+    for (Class<VVJSONSchemaValidator> validatorClass in draft7ValidatorClasses) {
+        if ([self registerValidatorClass:validatorClass forMetaschemaURI:nil specification:[VVJSONSchemaSpecification draft7]  withError:NULL] == NO) {
+            [NSException raise:NSInternalInconsistencyException format:@"Failed to register standard JSON draft-07 Schema validators."];
         }
     }
 }
