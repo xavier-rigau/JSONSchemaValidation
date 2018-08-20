@@ -71,7 +71,8 @@ static NSString * const kSchemaKeywordDependencies = @"dependencies";
                 success = NO;
             }
         } else if ([dependencyObject isKindOfClass:[NSArray class]]) {
-            if (schemaFactory.specification.version == VVJSONSchemaSpecificationVersionDraft6) {
+            if (schemaFactory.specification.version == VVJSONSchemaSpecificationVersionDraft6 ||
+                schemaFactory.specification.version == VVJSONSchemaSpecificationVersionDraft7) {
                 if (((NSArray *)dependencyObject).count == 0) {
                     *stop = YES;
                     success = YES;

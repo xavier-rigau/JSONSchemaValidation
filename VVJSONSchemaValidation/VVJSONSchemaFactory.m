@@ -183,7 +183,8 @@ static NSString * const kSchemaKeywordReference = @"$ref";
         
         return schema;
     }
-    else if (self.specification.version == VVJSONSchemaSpecificationVersionDraft6 &&
+    else if ((self.specification.version == VVJSONSchemaSpecificationVersionDraft6 ||
+              self.specification.version == VVJSONSchemaSpecificationVersionDraft7) &&
              [foundationObject isKindOfClass:NSNumber.class] &&
              ((NSNumber *)foundationObject).vv_isBoolean) {
         BOOL schemaValue = [foundationObject boolValue];

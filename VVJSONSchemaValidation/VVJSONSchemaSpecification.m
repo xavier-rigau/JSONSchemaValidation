@@ -31,6 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
     return [[self alloc] initWithVersion:VVJSONSchemaSpecificationVersionDraft6];
 }
 
++ (instancetype)draft7
+{
+    return [[self alloc] initWithVersion:VVJSONSchemaSpecificationVersionDraft7];
+}
+
 - (instancetype)initWithVersion:(VVJSONSchemaSpecificationVersion)version
 {
     self = [super init];
@@ -45,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
         case VVJSONSchemaSpecificationVersionDraft4:
             return @"id";
         case VVJSONSchemaSpecificationVersionDraft6:
+        case VVJSONSchemaSpecificationVersionDraft7:
             return @"$id";
     }
 }
@@ -61,6 +67,10 @@ NS_ASSUME_NONNULL_BEGIN
             }   
             case VVJSONSchemaSpecificationVersionDraft6: {
                 _defaultMetaschemaURI = [NSURL URLWithString:@"http://json-schema.org/draft-06/schema#"];
+                break;
+            }
+            case VVJSONSchemaSpecificationVersionDraft7: {
+                _defaultMetaschemaURI = [NSURL URLWithString:@"http://json-schema.org/draft-07/schema#"];
                 break;
             }
         }
@@ -121,7 +131,8 @@ NS_ASSUME_NONNULL_BEGIN
                              nil];
                 break;
             }
-            case VVJSONSchemaSpecificationVersionDraft6: {
+            case VVJSONSchemaSpecificationVersionDraft6:
+            case VVJSONSchemaSpecificationVersionDraft7: {
                 _keywords = [NSSet setWithObjects:
                              // object keywords
                              @"properties",

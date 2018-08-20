@@ -85,7 +85,8 @@ static NSString * const kSchemaKeywordRequired = @"required";
             return NO;
         }
         
-        if (specification.version == VVJSONSchemaSpecificationVersionDraft6) {
+        if (specification.version == VVJSONSchemaSpecificationVersionDraft6 ||
+            specification.version == VVJSONSchemaSpecificationVersionDraft7) {
             if ([required count] == 0) {
                 return YES;
             }

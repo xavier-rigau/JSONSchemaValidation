@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, VVJSONSchemaSpecificationVersion) {
     VVJSONSchemaSpecificationVersionDraft4,
     VVJSONSchemaSpecificationVersionDraft6,
+    VVJSONSchemaSpecificationVersionDraft7,
 };
 
 /**
@@ -22,7 +23,7 @@ typedef NS_ENUM(NSUInteger, VVJSONSchemaSpecificationVersion) {
 
 /** Specification version value. */
 @property (nonatomic, readonly, assign) VVJSONSchemaSpecificationVersion version;
-/** ID Schema Keyword ('id' for draft 4 or '$id' for draft 6). */
+/** ID Schema Keyword ('id' for draft 4 or '$id' for draft 6 / 7). */
 @property (nonatomic, readonly, copy) NSString *idKeyword;
 @property (nonatomic, readonly, strong) NSURL *defaultMetaschemaURI;
 @property (nonatomic, readonly, copy) NSSet<NSURL *> *supportedMetaschemaURIs;

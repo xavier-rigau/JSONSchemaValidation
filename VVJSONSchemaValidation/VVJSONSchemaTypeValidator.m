@@ -102,7 +102,9 @@ static NSString * const kSchemaKeywordType = @"type";
         if ([instance vv_isInteger]) {
             return YES;
         }
-        if (self.specification.version == VVJSONSchemaSpecificationVersionDraft6 && [instance vv_isFloat]) {
+        if ((self.specification.version == VVJSONSchemaSpecificationVersionDraft6 ||
+             self.specification.version == VVJSONSchemaSpecificationVersionDraft7) &&
+            [instance vv_isFloat]) {
             // "a float without fractional part is an integer"
             double doubleValue = [instance doubleValue];
             double fractionalPart = fmod(doubleValue, 1.0);
