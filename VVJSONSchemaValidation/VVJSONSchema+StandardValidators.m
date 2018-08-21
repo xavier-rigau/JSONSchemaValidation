@@ -19,7 +19,7 @@
     [draft6ValidatorClasses addObjectsFromArray:@[ [VVJSONSchemaConstValidator class], [VVJSONSchemaContainsValidator class], [VVJSONSchemaPropertyNamesValidator class] ]];
     
     NSMutableArray<Class<VVJSONSchemaValidator>> *draft7ValidatorClasses = [draft6ValidatorClasses mutableCopy];
-    [draft7ValidatorClasses addObject:[VVJSONSchemaConditionalValidator class]];
+    [draft7ValidatorClasses addObjectsFromArray:@[ [VVJSONSchemaConditionalValidator class], [VVJSONSchemaContentValidator class] ] ];
     
     for (Class<VVJSONSchemaValidator> validatorClass in draft4ValidatorClasses) {
         if ([self registerValidatorClass:validatorClass forMetaschemaURI:nil specification:[VVJSONSchemaSpecification draft4]  withError:NULL] == NO) {

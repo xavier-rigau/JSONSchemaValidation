@@ -93,6 +93,12 @@ NSString * const VVJSONSchemaErrorFailingObjectPathKey = @"path";
             
         case VVJSONSchemaErrorCodeFormatNameAlreadyDefined:
             return NSLocalizedString(@"Attempted to register a format validator with already defined format name.", nil);
+        
+        case VVJSONSchemaErrorCodeContentDecoderAlreadyDefined:
+            return NSLocalizedString(@"Attempted to register a 'contentEncoding' decoder with already defined encoding name.", nil);
+        
+        case VVJSONSchemaErrorCodeContentMediaTypeValidatorAlreadyDefined:
+            return NSLocalizedString(@"Attempted to register a 'contentMediaType' validator with already defined content media type.", nil);
             
         case VVJSONSchemaErrorCodeValidationFailed:
             return NSLocalizedString(@"JSON instance validation against the schema failed.", nil);

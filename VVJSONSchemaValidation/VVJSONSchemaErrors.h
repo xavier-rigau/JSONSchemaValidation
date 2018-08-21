@@ -46,6 +46,10 @@ typedef NS_ENUM(NSUInteger, VVJSONSchemaErrorCode) {
     VVJSONSchemaErrorCodeValidatorKeywordAlreadyDefined = 201,
     /** Attempted to register a format validator with already defined format name. */
     VVJSONSchemaErrorCodeFormatNameAlreadyDefined = 202,
+    /** Attempted to register a contentEncoding decoder with already defined encoding name. */
+    VVJSONSchemaErrorCodeContentDecoderAlreadyDefined = 203,
+    /** Attempted to register a contentMediaType validator with already defined content media type. */
+    VVJSONSchemaErrorCodeContentMediaTypeValidatorAlreadyDefined = 204,
     
     /** JSON instance validation against the schema failed. */
     VVJSONSchemaErrorCodeValidationFailed = 300,
