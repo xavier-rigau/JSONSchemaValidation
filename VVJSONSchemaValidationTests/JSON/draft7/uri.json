@@ -19,11 +19,6 @@
                 "valid": true
             },
             {
-                "description": "a valid puny-coded URL ",
-                "data": "http://xn--nw2a.xn--j6w193g/",
-                "valid": true
-            },
-            {
                 "description": "a valid URL with many special characters",
                 "data": "http://-.~_!$&'()*+,;=:%40:80%2f::::::@example.com",
                 "valid": true
@@ -44,31 +39,6 @@
                 "valid": true
             },
             {
-                "description": "a valid URL ",
-                "data": "ldap://[2001:db8::7]/c=GB?objectClass?one",
-                "valid": true
-            },
-            {
-                "description": "a valid mailto URI",
-                "data": "mailto:John.Doe@example.com",
-                "valid": true
-            },
-            {
-                "description": "a valid newsgroup URI",
-                "data": "news:comp.infosystems.www.servers.unix",
-                "valid": true
-            },
-            {
-                "description": "a valid tel URI",
-                "data": "tel:+1-816-555-1212",
-                "valid": true
-            },
-            {
-                "description": "a valid URN",
-                "data": "urn:oasis:names:specification:docbook:dtd:xml:4.1.2",
-                "valid": true
-            },
-            {
                 "description": "an invalid protocol-relative URI Reference",
                 "data": "//foo.bar/?baz=qux#quux",
                 "valid": false
@@ -76,11 +46,6 @@
             {
                 "description": "an invalid relative URI Reference",
                 "data": "/abc",
-                "valid": false
-            },
-            {
-                "description": "an invalid URI",
-                "data": "\\\\WINDOWS\\fileshare",
                 "valid": false
             },
             {

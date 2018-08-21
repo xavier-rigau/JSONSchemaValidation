@@ -19,11 +19,6 @@
                 "valid": true
             },
             {
-                "description": "an invalid URI Reference",
-                "data": "\\\\WINDOWS\\fileshare",
-                "valid": false
-            },
-            {
                 "description": "a valid URI Reference",
                 "data": "abc",
                 "valid": true
@@ -32,11 +27,6 @@
                 "description": "a valid URI fragment",
                 "data": "#fragment",
                 "valid": true
-            },
-            {
-                "description": "an invalid URI fragment",
-                "data": "#frag\\ment",
-                "valid": false
             }
         ]
     }

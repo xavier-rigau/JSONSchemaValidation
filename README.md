@@ -201,7 +201,7 @@ Using `+[VVJSONSchemaFormatValidator registerFormat:withRegularExpression:error:
 - Regular expression patterns are validated using `NSRegularExpression`, which uses ICU implementation, not ECMA 262. Thus, some features like look-behind are not supported.
 - Loading schema references from external locations is not supported. See [Schema storage and external references](#schema-storage-and-external-references) for more details.
 - Schema keywords defined inside a schema reference (object with "$ref" property) are ignored as per [JSON Reference specification draft](https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03).
-- `"uri-template"` and `"json-pointer"` formats of the draft 6 are not supported. But they can be used as described in [Extending](##Extending) section
+- Validation of following formats is not supported: `"uri-template"`, `"json-pointer"`, `"idn-email"`, `"idn-hostname"`, `"iri"`, `"iri-reference"`, `"relative-json-pointer"`. But they can be used as described in [Extending](##Extending) section
 
 ## License
 

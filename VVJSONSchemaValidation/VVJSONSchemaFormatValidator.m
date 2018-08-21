@@ -30,6 +30,7 @@ static NSString * const kSchemaKeywordFormat = @"format";
 
         success &= [self registerFormat:@"ipv4" withBlock:[self IPv4AddressValidationBlock] error:NULL];
         success &= [self registerFormat:@"ipv6" withBlock:[self IPv6AddressValidationBlock] error:NULL];
+        success &= [self registerFormat:@"regex" withBlock:[self regexpValidationBlock] error:NULL];
         
         NSAssert(success, @"Registering standard formats must succeed!");
     }
@@ -210,6 +211,20 @@ static NSMutableDictionary<NSString *, VVJSONSchemaFormatValidatorBlock> *blockB
         int result = inet_pton(AF_INET6, utf8, &dst);
         
         return result == 1;
+    };
+}
+
++ (VVJSONSchemaFormatValidatorBlock)regexpValidationBlock
+{
+    return ^BOOL(id instance) {
+        if ([instance isKindOfClass:[NSString class]] == NO) {
+            return NO;
+        }
+        
+        NSError *error = nil;
+        __unused NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:instance options:kNilOptions error:&error];
+        
+        return error == nil;
     };
 }
 
