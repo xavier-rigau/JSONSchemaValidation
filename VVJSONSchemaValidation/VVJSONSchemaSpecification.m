@@ -113,49 +113,61 @@ NS_ASSUME_NONNULL_BEGIN
     if (!_keywords) {
         switch (self.version) {
             case VVJSONSchemaSpecificationVersionDraft4: {
-                _keywords = [NSSet setWithObjects:
-                             // object keywords
-                             @"properties",
-                             @"required",
-                             @"minProperties",
-                             @"maxProperties",
-                             @"dependencies",
-                             @"patternProperties",
-                             @"additionalProperties",
-                             // array keywords
-                             @"items",
-                             @"additionalItems",
-                             @"minItems",
-                             @"maxItems",
-                             @"uniqueItems",
-                             nil];
+                _keywords = [NSSet setWithArray:[self.class draft4Keywords]];
                 break;
             }
-            case VVJSONSchemaSpecificationVersionDraft6:
+            case VVJSONSchemaSpecificationVersionDraft6: {
+                _keywords = [NSSet setWithArray:[self.class draft6Keywords]];
+                break;
+            }
             case VVJSONSchemaSpecificationVersionDraft7: {
-                _keywords = [NSSet setWithObjects:
-                             // object keywords
-                             @"properties",
-                             @"required",
-                             @"minProperties",
-                             @"maxProperties",
-                             @"dependencies",
-                             @"patternProperties",
-                             @"additionalProperties",
-                             @"propertyNames",
-                             // array keywords
-                             @"items",
-                             @"additionalItems",
-                             @"minItems",
-                             @"maxItems",
-                             @"uniqueItems",
-                             @"contains",
-                             nil];
+                _keywords = [NSSet setWithArray:[self.class draft7Keywords]];
                 break;
             }
         }
     }
     return _keywords;
+}
+
++ (NSArray<NSString *> *)draft4Keywords {
+    return @[
+        // object keywords
+        @"properties",
+        @"required",
+        @"minProperties",
+        @"maxProperties",
+        @"dependencies",
+        @"patternProperties",
+        @"additionalProperties",
+        // array keywords
+        @"items",
+        @"additionalItems",
+        @"minItems",
+        @"maxItems",
+        @"uniqueItems",
+    ];
+}
+
++ (NSArray<NSString *> *)draft6Keywords {
+    NSMutableArray *draft6Keywords = [[self draft4Keywords] mutableCopy];
+    [draft6Keywords addObjectsFromArray:@[
+        // object keywords
+        @"propertyNames",
+        // array keywords
+        @"contains",
+    ]];
+    return [draft6Keywords copy];
+}
+
++ (NSArray<NSString *> *)draft7Keywords {
+    NSMutableArray *draft7Keywords = [[self draft6Keywords] mutableCopy];
+    [draft7Keywords addObjectsFromArray:@[
+        // object keywords
+        @"if",
+        @"then",
+        @"else",
+    ]];
+    return [draft7Keywords copy];
 }
 
 @end
