@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation VVJSONSchemaValidationOptions
 
+- (NSString *)description
+{
+    return [[super description] stringByAppendingFormat:@"{ removeAdditional: %@ }", self.removeAdditional ? @"YES" : @"NO"];
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

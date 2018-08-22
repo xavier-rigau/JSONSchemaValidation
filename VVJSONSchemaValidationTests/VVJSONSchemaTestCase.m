@@ -70,9 +70,15 @@
     return [[super description] stringByAppendingFormat:@"{ '%@', %lu tests }", self.testCaseDescription, (unsigned long)self.tests.count];
 }
 
-- (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage error:(NSError *__autoreleasing *)error
+- (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage error:(NSError * __autoreleasing *)error {
+    return [self instantiateSchemaWithReferenceStorage:schemaStorage options:nil error:error];
+}
+
+- (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError *__autoreleasing *)error
 {
-    self.schema = [VVJSONSchema schemaWithObject:self.schemaObject baseURI:nil referenceStorage:schemaStorage specification:self.specification options:nil error:error];
+    options = options ?: [[VVJSONSchemaValidationOptions alloc] init];
+    
+    self.schema = [VVJSONSchema schemaWithObject:self.schemaObject baseURI:nil referenceStorage:schemaStorage specification:self.specification options:options error:error];
     return (self.schema != nil);
 }
 

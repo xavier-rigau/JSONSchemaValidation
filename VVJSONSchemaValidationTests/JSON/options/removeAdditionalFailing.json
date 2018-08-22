@@ -1,0 +1,51 @@
+[
+    {
+        "description": "remove properties that would error when `additionalProperties` is a schema",
+        "schema": {
+            "properties": {
+                "foo": { "type": "string" },
+                "bar": { "type": "string" }
+            },
+            "additionalProperties": { "type": "string" }
+        },
+        "tests": [
+            {
+                "description": "object with disallowed additionalProperties is valid",
+                "data": {
+                    "foo": "foo",
+                    "bar": "bar",
+                    "baz": "baz-to-be-removed",
+                    "fizz": 1000
+                },
+                "valid": true
+            }
+        ]
+    },
+    {
+        "description": "remove properties that would error when `additionalProperties` is a schema (second test)",
+        "schema": {
+            "properties": {
+                "foo": { "type": "string" },
+                "bar": { "type": "string" }
+            },
+            "additionalProperties": { 
+                "type": "string",
+                "pattern": "^to-be-",
+                "maxLength": 10 
+            }
+        },
+        "tests": [
+            {
+                "description": "object with disallowed additionalProperties is valid",
+                "data": {
+                    "foo": "foo",
+                    "bar": "bar",
+                    "baz": "to-be-kept",
+                    "quux": "to-be-removed",
+                    "fizz": 1000
+                },
+                "valid": true
+            }
+        ]
+    }
+]

@@ -13,13 +13,19 @@
 #import "VVJSONSchemaValidationContext.h"
 #import "NSNumber+VVJSONNumberTypes.h"
 
+@interface VVJSONSchemaObjectPropertiesValidator ()
+
+@property (nonatomic, readonly, strong) VVJSONSchemaValidationOptions *options;
+
+@end
+
 @implementation VVJSONSchemaObjectPropertiesValidator
 
 static NSString * const kSchemaKeywordProperties = @"properties";
 static NSString * const kSchemaKeywordAdditionalProperties = @"additionalProperties";
 static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
 
-- (instancetype)initWithPropertySchemas:(NSDictionary<NSString *, VVJSONSchema *> *)propertySchemas additionalPropertiesSchema:(VVJSONSchema *)additionalPropertiesSchema additionalPropertiesAllowed:(BOOL)additionalPropertiesAllowed patternBasedPropertySchemas:(NSDictionary<NSRegularExpression *, VVJSONSchema *> *)patternBasedPropertySchemas
+- (instancetype)initWithPropertySchemas:(NSDictionary<NSString *, VVJSONSchema *> *)propertySchemas additionalPropertiesSchema:(VVJSONSchema *)additionalPropertiesSchema additionalPropertiesAllowed:(BOOL)additionalPropertiesAllowed patternBasedPropertySchemas:(NSDictionary<NSRegularExpression *, VVJSONSchema *> *)patternBasedPropertySchemas options:(VVJSONSchemaValidationOptions *)options
 {
     NSAssert(additionalPropertiesSchema == nil || additionalPropertiesAllowed, @"Cannot have additional properties schema if additional properties are not allowed.");
     
@@ -29,6 +35,7 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
         _additionalPropertiesSchema = additionalPropertiesSchema;
         _additionalPropertiesAllowed = additionalPropertiesAllowed;
         _patternBasedPropertySchemas = [patternBasedPropertySchemas copy];
+        _options = options;
     }
     
     return self;
@@ -181,7 +188,7 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
         return nil;
     }
     
-    return [[self alloc] initWithPropertySchemas:propertySchemas additionalPropertiesSchema:additionalPropertiesSchema additionalPropertiesAllowed:additionalPropertiesAllowed patternBasedPropertySchemas:patternBasedProperties];
+    return [[self alloc] initWithPropertySchemas:propertySchemas additionalPropertiesSchema:additionalPropertiesSchema additionalPropertiesAllowed:additionalPropertiesAllowed patternBasedPropertySchemas:patternBasedProperties options:schemaFactory.options];
 }
 
 - (NSArray<VVJSONSchema *> *)subschemas
@@ -220,7 +227,10 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
         // enumerate and validate all schemas applicable to the property
         BOOL enumerationSuccess = [self enumerateSchemasForProperty:key withBlock:^(VVJSONSchema *schema, BOOL *innerStop) {
             [context pushValidationPathComponent:key];
-            BOOL result = [schema validateObject:obj inContext:context error:&internalError];
+            BOOL result = YES;
+            if (self.options.removeAdditional == VVJSONSchemaValidationOptionsRemoveAdditionalNone) {
+                result = [schema validateObject:obj inContext:context error:&internalError];
+            }
             [context popValidationPathComponent];
             
             if (result == NO) {
@@ -282,6 +292,10 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
     }
 
     if (visitedOnce == NO) {
+        if (self.options.removeAdditional == VVJSONSchemaValidationOptionsRemoveAdditionalAll) {
+            return YES;
+        }
+        
         // if applicable schema was not found, respect additional properties configuration:
         VVJSONSchema *additionalPropertiesSchema = self.additionalPropertiesSchema;
         if (additionalPropertiesSchema != nil) {
@@ -289,7 +303,7 @@ static NSString * const kSchemaKeywordPatternProperties = @"patternProperties";
             // stop parameter is passed in the block, but not used anymore
             block(additionalPropertiesSchema, &enumerationStop);
             return YES;
-        } else if (self.additionalPropertiesAllowed) {
+        } else if (self.additionalPropertiesAllowed || self.options.removeAdditional == VVJSONSchemaValidationOptionsRemoveAdditionalYes) {
             // additional properties schema is not defined, but any additional properties are allowed
             return YES;
         } else {

@@ -1,0 +1,92 @@
+[
+    {
+        "description": "remove properties that would error when `additionalProperties = false`",
+        "schema": {
+            "additionalProperties": false,
+            "properties": {
+                "foo": {
+                    "type": "number"
+                },
+                "bar": {
+                    "additionalProperties": {
+                        "type": "number"
+                    },
+                    "properties": {
+                        "baz": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "tests": [
+            {
+                "description": "object with disallowed additionalProperties is valid",
+                "data": {
+                    "foo": 0,
+                    "additional1": 1,
+                    "bar": {
+                        "baz": "abc",
+                        "additional2": 2
+                    }
+                },
+                "valid": true
+            }
+        ]
+    },
+    {
+        "description": "remove properties that would error when `additionalProperties = false` (second test)",
+        "schema": {
+            "additionalProperties": false,
+            "properties": {
+                "foo": { "type": "string" },
+                "bar": { "type": "string" }
+            }
+        },
+        "tests": [
+            {
+                "description": "object with disallowed additionalProperties is valid",
+                "data": {
+                    "foo": "foo",
+                    "bar": "bar",
+                    "baz": "baz-to-be-removed"
+                },
+                "valid": true
+            }
+        ]
+    },
+    {
+        "description": "remove properties that would error when `additionalProperties = false` (many properties, boolean schema)",
+        "schema": {
+            "properties": {
+                "obj": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "a": { "type": "string" },
+                        "b": false,
+                        "c": { "type": "string" },
+                        "d": { "type": "string" },
+                        "e": { "type": "string" },
+                        "f": { "type": "string" },
+                        "g": { "type": "string" },
+                        "h": { "type": "string" },
+                        "i": { "type": "string" }
+                    }
+                }
+            }
+        },
+        "tests": [
+            {
+                "description": "object with disallowed additionalProperties is valid",
+                "data": {
+                    "obj": {
+                        "a": "valid",
+                        "b": "should not be removed",
+                        "additional": "will be removed"
+                    }
+                },
+                "valid": true
+            }
+        ]
+    }
+]

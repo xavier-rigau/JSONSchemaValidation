@@ -27,6 +27,12 @@
         _subschemas = [subschemas copy];
         _specification = specification;
         _options = options ?: [[VVJSONSchemaValidationOptions alloc] init];
+        
+        // check if options is appliable
+        NSAssert(options.removeAdditional == VVJSONSchemaValidationOptionsRemoveAdditionalNone ||
+                 specification.version == VVJSONSchemaSpecificationVersionDraft6 ||
+                 specification.version == VVJSONSchemaSpecificationVersionDraft7,
+                 @"`removeAdditional` option is not available for the draft 4 specification");
     }
     
     return self;

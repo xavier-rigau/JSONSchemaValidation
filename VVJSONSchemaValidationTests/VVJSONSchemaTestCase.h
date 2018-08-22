@@ -11,6 +11,7 @@
 @class VVJSONSchema;
 @class VVJSONSchemaStorage;
 @class VVJSONSchemaSpecification;
+@class VVJSONSchemaValidationOptions;
 @class VVJSONSchemaTest;
 
 @interface VVJSONSchemaTestCase : NSObject
@@ -26,6 +27,7 @@
 - (instancetype)initWithDescription:(NSString *)description schemaObject:(NSDictionary<NSString *, id> *)schemaObject tests:(NSArray<VVJSONSchemaTest *> *)tests specification:(VVJSONSchemaSpecification *)specification;
 
 - (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage error:(NSError * __autoreleasing *)error;
+- (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError *__autoreleasing *)error;
 - (BOOL)runTestsWithError:(NSError * __autoreleasing *)error;
 
 @end
