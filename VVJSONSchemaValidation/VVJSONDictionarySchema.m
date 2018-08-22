@@ -20,7 +20,7 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
 
 #pragma mark - Schema parsing
 
-+ (nullable instancetype)schemaWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error
++ (nullable instancetype)schemaWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error
 {
     if ([schemaDictionary isKindOfClass:NSDictionary.class] == NO) {
         if (error != NULL) {
@@ -60,7 +60,7 @@ static NSString * const kSchemaKeywordSchema = @"$schema";
     NSError *internalError = nil;
     @autoreleasepool {
         // instantiate a root schema factory and use it to create the schema
-        VVJSONSchemaFactory *factory = [VVJSONSchemaFactory factoryWithScopeURI:scopeURI keywordsMapping:keywordsMapping specification:specification];
+        VVJSONSchemaFactory *factory = [VVJSONSchemaFactory factoryWithScopeURI:scopeURI keywordsMapping:keywordsMapping specification:specification options:options];
         schema = [factory schemaWithObject:schemaDictionary error:&internalError];
         
         if (schema != nil) {

@@ -65,7 +65,7 @@
 + (void)addSchemaFromURL:(NSURL *)url withScopeURI:(NSURL *)scopeURI intoStorage:(VVMutableJSONSchemaStorage *)storage
 {
     NSData *schemaData = [NSData dataWithContentsOfURL:url];
-    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil specification:[self specification] error:NULL];
+    VVJSONSchema *schema = [VVJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil specification:[self specification] options:nil error:NULL];
     if (schema == nil) {
         [NSException raise:NSInternalInconsistencyException format:@"Failed to instantiate reference schema from %@.", url];
     }

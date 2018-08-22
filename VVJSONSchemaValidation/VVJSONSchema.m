@@ -14,7 +14,7 @@
 
 @implementation VVJSONSchema
 
-- (instancetype)initWithScopeURI:(NSURL *)uri title:(nullable NSString *)title description:(nullable NSString *)description validators:(nullable NSArray<id<VVJSONSchemaValidator>> *)validators subschemas:(nullable NSArray<VVJSONSchema *> *)subschemas specification:(VVJSONSchemaSpecification *)specification
+- (instancetype)initWithScopeURI:(NSURL *)uri title:(nullable NSString *)title description:(nullable NSString *)description validators:(nullable NSArray<id<VVJSONSchemaValidator>> *)validators subschemas:(nullable NSArray<VVJSONSchema *> *)subschemas specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options
 {
     NSParameterAssert(uri);
     
@@ -26,6 +26,7 @@
         _validators = [validators copy];
         _subschemas = [subschemas copy];
         _specification = specification;
+        _options = options ?: [[VVJSONSchemaValidationOptions alloc] init];
     }
     
     return self;
@@ -38,10 +39,11 @@
 
 #pragma mark - Schema parsing
 
-+ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error
++ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error
 {
+    VVJSONSchemaValidationOptions *nonnullOptions = options ?: [[VVJSONSchemaValidationOptions alloc] init];
     if ([foundationObject isKindOfClass:[NSDictionary class]]) {
-        return [VVJSONDictionarySchema schemaWithDictionary:foundationObject baseURI:baseURI referenceStorage:referenceStorage specification:specification error:error];
+        return [VVJSONDictionarySchema schemaWithDictionary:foundationObject baseURI:baseURI referenceStorage:referenceStorage specification:specification options:nonnullOptions error:error];
     } else if (foundationObject != nil) {
         if (specification.version == VVJSONSchemaSpecificationVersionDraft4) {
             // schema object must be a dictionary for draft-04
@@ -53,7 +55,7 @@
         
         // is boolean schema
         if ([foundationObject isKindOfClass:NSNumber.class] && [foundationObject vv_isBoolean]) {
-            return [VVJSONBooleanSchema schemaWithNumber:foundationObject baseURI:baseURI specification:specification error:error];
+            return [VVJSONBooleanSchema schemaWithNumber:foundationObject baseURI:baseURI specification:specification options:nonnullOptions error:error];
         }
         else {
             if (error != NULL) {
@@ -66,10 +68,10 @@
     }
 }
 
-+ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error
++ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error
 {
     id object = [NSJSONSerialization JSONObjectWithData:schemaData options:(NSJSONReadingOptions)kNilOptions error:error];
-    return [self schemaWithObject:object baseURI:baseURI referenceStorage:referenceStorage specification:specification error:error];
+    return [self schemaWithObject:object baseURI:baseURI referenceStorage:referenceStorage specification:specification options:options error:error];
 }
 
 - (BOOL)visitUsingBlock:(void (^)(VVJSONSchema *subschema, BOOL *stop))block

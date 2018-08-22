@@ -128,7 +128,7 @@ extern uint64_t dispatch_benchmark(size_t count, void (^block)(void));
     
     for (NSUInteger parallelism = 0; parallelism < 10; parallelism++) {
         dispatch_async(queue, ^{
-            VVJSONSchema *schema = [VVJSONSchema schemaWithObject:schemaObject baseURI:nil referenceStorage:self->_referenceStorage specification:[self.class specification] error:NULL];
+            VVJSONSchema *schema = [VVJSONSchema schemaWithObject:schemaObject baseURI:nil referenceStorage:self->_referenceStorage specification:[self.class specification] options:nil error:NULL];
             XCTAssertNotNil(schema);
         });
     }

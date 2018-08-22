@@ -72,7 +72,7 @@
 
 - (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage error:(NSError *__autoreleasing *)error
 {
-    self.schema = [VVJSONSchema schemaWithObject:self.schemaObject baseURI:nil referenceStorage:schemaStorage specification:self.specification error:error];
+    self.schema = [VVJSONSchema schemaWithObject:self.schemaObject baseURI:nil referenceStorage:schemaStorage specification:self.specification options:nil error:error];
     return (self.schema != nil);
 }
 

@@ -74,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Schema parsing
 
-+ (nullable instancetype)schemaWithNumber:(NSNumber *)schemaNumber baseURI:(nullable NSURL *)baseURI specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error
++ (nullable instancetype)schemaWithNumber:(NSNumber *)schemaNumber baseURI:(nullable NSURL *)baseURI specification:(VVJSONSchemaSpecification *)specification options:(VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error
 {
     if ([schemaNumber isKindOfClass:NSNumber.class] == NO) {
         if (error != NULL) {
@@ -87,15 +87,15 @@ NS_ASSUME_NONNULL_BEGIN
     NSURL *scopeURI = baseURI ?: [NSURL URLWithString:@""];
     scopeURI = scopeURI.vv_normalizedURI;
     
-    VVJSONBooleanSchema *schema = [[self alloc] initWithScopeURI:scopeURI schemaValue:schemaNumber.boolValue specification:specification];
+    VVJSONBooleanSchema *schema = [[self alloc] initWithScopeURI:scopeURI schemaValue:schemaNumber.boolValue specification:specification options:options];
     
     return schema;
 }
 
-- (instancetype)initWithScopeURI:(NSURL *)uri schemaValue:(BOOL)schemaValue specification:(VVJSONSchemaSpecification *)specification
+- (instancetype)initWithScopeURI:(NSURL *)uri schemaValue:(BOOL)schemaValue specification:(VVJSONSchemaSpecification *)specification options:(VVJSONSchemaValidationOptions *)options
 {
     VVJSONSchemaBooleanSchemaValidator *validator = [[VVJSONSchemaBooleanSchemaValidator alloc] initWithSchemaValue:schemaValue];
-    self = [super initWithScopeURI:uri title:nil description:nil validators:@[ validator ] subschemas:nil specification:specification];
+    self = [super initWithScopeURI:uri title:nil description:nil validators:@[ validator ] subschemas:nil specification:specification options:options];
     if (self) {
     }
     return self;

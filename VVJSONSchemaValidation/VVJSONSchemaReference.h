@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, weak) VVJSONSchema *referencedSchema;
 
 /** Initializes the receiver with scope URI and reference URI, leaving title, description and own set of validators as nil. */
-- (instancetype)initWithScopeURI:(NSURL *)uri referenceURI:(NSURL *)referenceURI subschemas:(nullable NSArray<VVJSONSchema *> *)subschemas specification:(VVJSONSchemaSpecification *)specification;
+- (instancetype)initWithScopeURI:(NSURL *)uri referenceURI:(NSURL *)referenceURI subschemas:(nullable NSArray<VVJSONSchema *> *)subschemas specification:(VVJSONSchemaSpecification *)specification options:(VVJSONSchemaValidationOptions *)options;
 
 /**
  Resolves receiver's reference URI with the specified schema.
@@ -31,8 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)resolveReferenceWithSchema:(VVJSONSchema *)schema;
 
-+ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
-+ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
++ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
++ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
 
 @end
 

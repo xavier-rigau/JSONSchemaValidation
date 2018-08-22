@@ -17,18 +17,19 @@ NS_ASSUME_NONNULL_BEGIN
  @param schemaNumber Number containing the Boolean JSON Schema representation.
  @param baseURI Optional base resolution scope URI of the created schema (e.g., URL the schema was loaded from). Resolution scope of the created schema may be overriden by "id" property of the schema.
  @param specification Schema specification version. Serves as a configuration for validation process.
+ @param options Schema validation options. Different options that allows to change default behaviour of the validator classes.
  @param error Error object to contain any error encountered during instantiation of the schema.
  @return Configured schema object, or nil if an error occurred.
  */
-+ (nullable instancetype)schemaWithNumber:(NSNumber *)schemaNumber baseURI:(nullable NSURL *)baseURI specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
++ (nullable instancetype)schemaWithNumber:(NSNumber *)schemaNumber baseURI:(nullable NSURL *)baseURI specification:(VVJSONSchemaSpecification *)specification options:(VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error;
 
 /**
  Designated initializer
  */
-- (instancetype)initWithScopeURI:(NSURL *)uri schemaValue:(BOOL)schemaValue specification:(VVJSONSchemaSpecification *)specification;
+- (instancetype)initWithScopeURI:(NSURL *)uri schemaValue:(BOOL)schemaValue specification:(VVJSONSchemaSpecification *)specification options:(VVJSONSchemaValidationOptions *)options;
 
-+ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
-+ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
++ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
++ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error NS_UNAVAILABLE;
 
 @end
 

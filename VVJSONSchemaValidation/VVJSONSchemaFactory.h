@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "VVJSONSchemaSpecification.h"
+#import "VVJSONSchemaValidationOptions.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,15 +26,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, copy) NSDictionary<NSString *, Class> *keywordsMapping;
 /** Schema specification version. */
 @property (nonatomic, readonly, strong) VVJSONSchemaSpecification *specification;
+/** Schema validation options. */
+@property (nonatomic, readonly, strong) VVJSONSchemaValidationOptions *options;
 
 /**
  Creates a root factory object with specified base resolution scope URI and keywords mapping.
  @param scopeURI Base resolution scope URI of the factory.
  @param keywordsMapping Keyword to validator class mapping to be used for the schemas created using the factory and its derived factories.
  @param specification Schema specification version. Serves as a configuration for validation process.
+ @param options Schema validation options. Different options that allows to change default behaviour of the validator classes.
  @discussion This method is invoked by the root schema instantiation process, you don't need to invoke it yourself.
  */
-+ (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping specification:(VVJSONSchemaSpecification *)specification;
++ (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping specification:(VVJSONSchemaSpecification *)specification options:(VVJSONSchemaValidationOptions *)options;
 
 /**
  Creates and returns a new factory object with the specified resolution scope and the same keywords mapping as the receiver.

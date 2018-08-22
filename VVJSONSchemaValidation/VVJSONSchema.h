@@ -11,6 +11,7 @@
 #import "VVJSONSchemaStorage.h"
 #import "VVJSONSchemaErrors.h"
 #import "VVJSONSchemaSpecification.h"
+#import "VVJSONSchemaValidationOptions.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -46,20 +47,23 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable, readonly, copy) NSArray<VVJSONSchema *> *subschemas;
 /** Schema specification version. */
 @property (nonatomic, readonly, strong) VVJSONSchemaSpecification *specification;
+/** Schema validation options. */
+@property (nonatomic, readonly, strong) VVJSONSchemaValidationOptions *options;
 
 /**
  Creates and returns a schema configured using a Foundation object (NSDictionary, NSNumber, ...) containing the JSON Schema representation.
  @param foundationObject Foundation object the JSON Schema representation. @param baseURI Optional base resolution scope URI of the created schema (e.g., URL the schema was loaded from). Resolution scope of the created schema may be overriden by "id" property of the schema.
  @param referenceStorage Optional schema storage to resolve external references. This storage must contain all external schemas referenced by the instantiated schema (if there are any), otherwise instantiation will fail.
  @param specification Schema specification version. Serves as a configuration for validation process.
+ @param options Schema validation options. Different options that allows to change default behaviour of the validator classes.
  @param error Error object to contain any error encountered during instantiation of the schema.
  @return Configured schema object, or nil if an error occurred.
  */
-+ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
++ (nullable instancetype)schemaWithObject:(id)foundationObject baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error;
 /**
  Acts similarly to `+schemaWithObject:baseURI:referenceStorage:specification:error:`, but retrieves the schema object from the specified JSON-encoded data.
  */
-+ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification error:(NSError * __autoreleasing *)error;
++ (nullable instancetype)schemaWithData:(NSData *)schemaData baseURI:(nullable NSURL *)baseURI referenceStorage:(nullable VVJSONSchemaStorage *)referenceStorage specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError * __autoreleasing *)error;
 
 /**
  Attempts to validate the specified object against the configuration of the receiver.
@@ -87,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
  Designated initializer.
  @discussion This initializer is used by the implementation and subclasses. Use one of the convenience factory methods instead.
  */
-- (instancetype)initWithScopeURI:(NSURL *)uri title:(nullable NSString *)title description:(nullable NSString *)description validators:(nullable NSArray<id<VVJSONSchemaValidator>> *)validators subschemas:(nullable NSArray<VVJSONSchema *> *)subschemas specification:(VVJSONSchemaSpecification *)specification;
+- (instancetype)initWithScopeURI:(NSURL *)uri title:(nullable NSString *)title description:(nullable NSString *)description validators:(nullable NSArray<id<VVJSONSchemaValidator>> *)validators subschemas:(nullable NSArray<VVJSONSchema *> *)subschemas specification:(VVJSONSchemaSpecification *)specification options:(nullable VVJSONSchemaValidationOptions *)options;
 
 /**
  Attempts to validate the specified object against the configuration of the receiver.
