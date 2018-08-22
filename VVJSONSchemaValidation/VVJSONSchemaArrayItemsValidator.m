@@ -66,10 +66,11 @@ static NSString * const kSchemaKeywordAdditionalItems = @"additionalItems";
     // parse items keyword
     VVJSONSchema *itemsSchema = nil;
     NSArray<VVJSONSchema *> *itemSchemas = nil;
-    if ([itemsObject isKindOfClass:[NSDictionary class]]) {
+    if ([itemsObject isKindOfClass:[NSDictionary class]] ||
+        [itemsObject isKindOfClass:[NSNumber class]]) {
         // parse as a schema object; schema will have scope extended by "/items"
         VVJSONSchemaFactory *itemsSchemaFactory = [schemaFactory factoryByAppendingScopeComponent:kSchemaKeywordItems];
-        itemsSchema = [itemsSchemaFactory schemaWithDictionary:itemsObject error:error];
+        itemsSchema = [itemsSchemaFactory schemaWithObject:itemsObject error:error];
         if (itemsSchema == nil) {
             return nil;
         }
@@ -81,12 +82,13 @@ static NSString * const kSchemaKeywordAdditionalItems = @"additionalItems";
         __block NSError *internalError = nil;
         [(NSArray<id> *)itemsObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             // schema object must be a dictionary
-            if ([obj isKindOfClass:[NSDictionary class]]) {
+            if ([obj isKindOfClass:[NSDictionary class]] ||
+                [obj isKindOfClass:[NSNumber class]]) {
                 // each schema will have scope extended by "/items/#" where # is its index
                 NSString *indexString = [NSString stringWithFormat:@"%lu", (unsigned long)idx];
                 VVJSONSchemaFactory *itemSchemaFactory = [schemaFactory factoryByAppendingScopeComponentsFromArray:@[ kSchemaKeywordItems, indexString ]];
                 
-                VVJSONSchema *itemSchema = [itemSchemaFactory schemaWithDictionary:obj error:&internalError];
+                VVJSONSchema *itemSchema = [itemSchemaFactory schemaWithObject:obj error:&internalError];
                 if (itemSchema != nil) {
                     [schemas addObject:itemSchema];
                 } else {
@@ -124,7 +126,7 @@ static NSString * const kSchemaKeywordAdditionalItems = @"additionalItems";
     if ([additionalItemsObject isKindOfClass:[NSDictionary class]]) {
         // parse as a schema object; schema will have scope extended by "/additionalItems"
         VVJSONSchemaFactory *additionalSchemaFactory = [schemaFactory factoryByAppendingScopeComponent:kSchemaKeywordAdditionalItems];
-        additionalItemsSchema = [additionalSchemaFactory schemaWithDictionary:additionalItemsObject error:error];
+        additionalItemsSchema = [additionalSchemaFactory schemaWithObject:additionalItemsObject error:error];
         if (additionalItemsSchema == nil) {
             return nil;
         }

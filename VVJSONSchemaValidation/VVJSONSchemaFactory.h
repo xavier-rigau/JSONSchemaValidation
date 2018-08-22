@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VVJSONSchemaSpecification.h"
+#import "VVJSONSchemaValidationOptions.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,14 +24,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, strong) NSURL *scopeURI;
 /** Keywords mapping used to create validators for the schema. */
 @property (nonatomic, readonly, copy) NSDictionary<NSString *, Class> *keywordsMapping;
+/** Schema specification version. */
+@property (nonatomic, readonly, strong) VVJSONSchemaSpecification *specification;
+/** Schema validation options. */
+@property (nonatomic, readonly, strong) VVJSONSchemaValidationOptions *options;
 
 /**
  Creates a root factory object with specified base resolution scope URI and keywords mapping.
  @param scopeURI Base resolution scope URI of the factory.
  @param keywordsMapping Keyword to validator class mapping to be used for the schemas created using the factory and its derived factories.
+ @param specification Schema specification version. Serves as a configuration for validation process.
+ @param options Schema validation options. Different options that allows to change default behaviour of the validator classes.
  @discussion This method is invoked by the root schema instantiation process, you don't need to invoke it yourself.
  */
-+ (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping;
++ (instancetype)factoryWithScopeURI:(NSURL *)scopeURI keywordsMapping:(NSDictionary<NSString *, Class> *)keywordsMapping specification:(VVJSONSchemaSpecification *)specification options:(VVJSONSchemaValidationOptions *)options;
 
 /**
  Creates and returns a new factory object with the specified resolution scope and the same keywords mapping as the receiver.
@@ -53,11 +61,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Returns a schema configured using the contents of specified JSON dictionary.
  @discussion Note that returned schema may have a different resolution scope URI than the value of `scopeURI` property, if that schema alters its scope with an "id" property.
- @param schemaDictionary Dictionary containing the JSON Schema representation.
+ @param foundationObject Foundation object containing the JSON Schema representation.
  @param error Error object to contain any error encountered during schema instantiation.
  @return Configured schema instance, or nil if an error occurred.
  */
-- (nullable VVJSONSchema *)schemaWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary error:(NSError * __autoreleasing *)error;
+- (nullable VVJSONSchema *)schemaWithObject:(id)foundationObject error:(NSError * __autoreleasing *)error;
 
 @end
 

@@ -10,6 +10,8 @@
 #import "VVJSONSchema.h"
 #import "VVJSONSchemaFactory.h"
 #import "VVJSONSchemaErrors.h"
+#import "NSNumber+VVJSONNumberTypes.h"
+#import "VVJSONBooleanSchema.h"
 
 @implementation VVJSONSchemaDependenciesValidator
 
@@ -55,12 +57,13 @@ static NSString * const kSchemaKeywordDependencies = @"dependencies";
     __block BOOL success = YES;
     __block NSError *internalError = nil;
     [dependencies enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, id dependencyObject, BOOL *stop) {
-        if ([dependencyObject isKindOfClass:[NSDictionary class]]) {
-            // dependency object is a dictionary - parse it as a schema dependency;
+        if ([dependencyObject isKindOfClass:[NSDictionary class]] ||
+            [dependencyObject isKindOfClass:[NSNumber class]]) {
+            // dependency object is a dictionary or boolean - parse it as a schema dependency;
             // schema will have scope extended by "/dependencies/#" where # is dependent property name
             VVJSONSchemaFactory *dependencySchemaFactory = [schemaFactory factoryByAppendingScopeComponentsFromArray:@[ kSchemaKeywordDependencies, propertyName ]];
             
-            VVJSONSchema *dependencySchema = [dependencySchemaFactory schemaWithDictionary:dependencyObject error:&internalError];
+            VVJSONSchema *dependencySchema = [dependencySchemaFactory schemaWithObject:dependencyObject error:&internalError];
             if (dependencySchema != nil) {
                 schemaDependencies[propertyName] = dependencySchema;
             } else {
@@ -68,6 +71,15 @@ static NSString * const kSchemaKeywordDependencies = @"dependencies";
                 success = NO;
             }
         } else if ([dependencyObject isKindOfClass:[NSArray class]]) {
+            if (schemaFactory.specification.version == VVJSONSchemaSpecificationVersionDraft6 ||
+                schemaFactory.specification.version == VVJSONSchemaSpecificationVersionDraft7) {
+                if (((NSArray *)dependencyObject).count == 0) {
+                    *stop = YES;
+                    success = YES;
+                    return;
+                }
+            }
+            
             // dependency object is an array - parse it as a property dependency;
             // each property names array must be non-empty and contain unique strings
             for (id dependentProperty in dependencyObject) {

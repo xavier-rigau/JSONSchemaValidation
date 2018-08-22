@@ -82,9 +82,10 @@ static NSString * const kSchemaKeywordNot = @"not";
     VVJSONSchema *notSchema = nil;
     if (notObject != nil) {
         // not must be a dictionary
-        if ([notObject isKindOfClass:[NSDictionary class]]) {
+        if ([notObject isKindOfClass:[NSDictionary class]] ||
+            [notObject isKindOfClass:[NSNumber class]]) {
             VVJSONSchemaFactory *internalFactory = [schemaFactory factoryByAppendingScopeComponent:kSchemaKeywordNot];
-            notSchema = [internalFactory schemaWithDictionary:notObject error:error];
+            notSchema = [internalFactory schemaWithObject:notObject error:error];
             if (notSchema == nil) {
                 return nil;
             }
@@ -119,7 +120,7 @@ static NSString * const kSchemaKeywordNot = @"not";
         NSString *scopeComponent = [NSString stringWithFormat:@"%lu", (unsigned long)idx];
         VVJSONSchemaFactory *internalSchemaFactory = [factory factoryByAppendingScopeComponent:scopeComponent];
         
-        VVJSONSchema *schema = [internalSchemaFactory schemaWithDictionary:schemaObject error:&internalError];
+        VVJSONSchema *schema = [internalSchemaFactory schemaWithObject:schemaObject error:&internalError];
         if (schema != nil) {
             [schemas addObject:schema];
         } else {
@@ -144,7 +145,8 @@ static NSString * const kSchemaKeywordNot = @"not";
         return NO;
     }
     for (id item in schemasArrayObject) {
-        if ([item isKindOfClass:[NSDictionary class]] == NO) {
+        if ([item isKindOfClass:[NSDictionary class]] == NO &&
+            [item isKindOfClass:[NSNumber class]] == NO) {
             return NO;
         }
     }

@@ -53,7 +53,8 @@ static NSString * const kSchemaKeywordDefinitions = @"definitions";
     __block BOOL success = YES;
     __block NSError *internalError = nil;
     [(NSDictionary<NSString *, id> *)definitions enumerateKeysAndObjectsUsingBlock:^(NSString *key, id schemaObject, BOOL *stop) {
-        if ([schemaObject isKindOfClass:[NSDictionary class]] == NO) {
+        if ([schemaObject isKindOfClass:[NSDictionary class]] == NO &&
+            [schemaObject isKindOfClass:[NSNumber class]] == NO) {
             internalError = [NSError vv_JSONSchemaErrorWithCode:VVJSONSchemaErrorCodeInvalidSchemaFormat failingObject:schemaObject];
             success = NO;
             *stop = YES;
@@ -63,7 +64,7 @@ static NSString * const kSchemaKeywordDefinitions = @"definitions";
         // each subschema has its resolution scope extended by "definitions/[schema_name]"
         VVJSONSchemaFactory *definitionFactory = [schemaFactory factoryByAppendingScopeComponentsFromArray:@[ kSchemaKeywordDefinitions, key ]];
         
-        VVJSONSchema *schema = [definitionFactory schemaWithDictionary:schemaObject error:&internalError];
+        VVJSONSchema *schema = [definitionFactory schemaWithObject:schemaObject error:&internalError];
         if (schema != nil) {
             [schemas addObject:schema];
         } else {

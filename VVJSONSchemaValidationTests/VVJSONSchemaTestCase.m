@@ -12,12 +12,13 @@
 @interface VVJSONSchemaTestCase ()
 
 @property (nonatomic, readwrite, strong) VVJSONSchema *schema;
+@property (strong, nonatomic) VVJSONSchemaSpecification *specification;
 
 @end
 
 @implementation VVJSONSchemaTestCase
 
-+ (instancetype)testCaseWithObject:(NSDictionary<NSString *, id> *)testCaseObject
++ (instancetype)testCaseWithObject:(NSDictionary<NSString *, id> *)testCaseObject specification:(VVJSONSchemaSpecification *)specification
 {
     NSString *description = testCaseObject[@"description"];
     NSDictionary<NSString *, id> *schemaObject = testCaseObject[@"schema"];
@@ -28,10 +29,10 @@
         [tests addObject:[VVJSONSchemaTest testWithObject:testData]];
     }
     
-    return [[self alloc] initWithDescription:description schemaObject:schemaObject tests:tests];
+    return [[self alloc] initWithDescription:description schemaObject:schemaObject tests:tests specification:specification];
 }
 
-+ (NSArray<VVJSONSchemaTestCase *> *)testCasesWithContentsOfURL:(NSURL *)testCasesJSONURL
++ (NSArray<VVJSONSchemaTestCase *> *)testCasesWithContentsOfURL:(NSURL *)testCasesJSONURL specification:(VVJSONSchemaSpecification *)specification
 {
     NSData *data = [NSData dataWithContentsOfURL:testCasesJSONURL];
     id json = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)0 error:NULL];
@@ -45,19 +46,20 @@
     
     NSMutableArray<VVJSONSchemaTestCase *> *testCases = [NSMutableArray arrayWithCapacity:[json count]];
     for (NSDictionary<NSString *, id> *testCaseData in json) {
-        [testCases addObject:[self testCaseWithObject:testCaseData]];
+        [testCases addObject:[self testCaseWithObject:testCaseData specification:specification]];
     }
     
     return [testCases copy];
 }
 
-- (instancetype)initWithDescription:(NSString *)description schemaObject:(NSDictionary<NSString *, id> *)schemaObject tests:(NSArray<VVJSONSchemaTest *> *)tests
+- (instancetype)initWithDescription:(NSString *)description schemaObject:(NSDictionary<NSString *, id> *)schemaObject tests:(NSArray<VVJSONSchemaTest *> *)tests specification:(VVJSONSchemaSpecification *)specification
 {
     self = [super init];
     if (self) {
         _testCaseDescription = [description copy];
         _schemaObject = [schemaObject copy];
         _tests = [tests copy];
+        _specification = specification;
     }
     
     return self;
@@ -68,9 +70,15 @@
     return [[super description] stringByAppendingFormat:@"{ '%@', %lu tests }", self.testCaseDescription, (unsigned long)self.tests.count];
 }
 
-- (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage error:(NSError *__autoreleasing *)error
+- (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage error:(NSError * __autoreleasing *)error {
+    return [self instantiateSchemaWithReferenceStorage:schemaStorage options:nil error:error];
+}
+
+- (BOOL)instantiateSchemaWithReferenceStorage:(VVJSONSchemaStorage *)schemaStorage options:(nullable VVJSONSchemaValidationOptions *)options error:(NSError *__autoreleasing *)error
 {
-    self.schema = [VVJSONSchema schemaWithDictionary:self.schemaObject baseURI:nil referenceStorage:schemaStorage error:error];
+    options = options ?: [[VVJSONSchemaValidationOptions alloc] init];
+    
+    self.schema = [VVJSONSchema schemaWithObject:self.schemaObject baseURI:nil referenceStorage:schemaStorage specification:self.specification options:options error:error];
     return (self.schema != nil);
 }
 

@@ -21,12 +21,16 @@ static NSString * const kSchemaKeywordFormat = @"format";
         BOOL success = YES;
         
         success &= [self registerFormat:@"date-time" withRegularExpression:[self dateTimeRegularExpression] error:NULL];
+        success &= [self registerFormat:@"date" withRegularExpression:[self dateRegularExpression] error:NULL];
+        success &= [self registerFormat:@"time" withRegularExpression:[self timeRegularExpression] error:NULL];
         success &= [self registerFormat:@"email" withRegularExpression:[self emailRegularExpression] error:NULL];
         success &= [self registerFormat:@"hostname" withRegularExpression:[self hostnameRegularExpression] error:NULL];
         success &= [self registerFormat:@"uri" withRegularExpression:[self URIRegularExpression] error:NULL];
+        success &= [self registerFormat:@"uri-reference" withRegularExpression:[self URIReferenceRegularExpression] error:NULL];
 
         success &= [self registerFormat:@"ipv4" withBlock:[self IPv4AddressValidationBlock] error:NULL];
         success &= [self registerFormat:@"ipv6" withBlock:[self IPv6AddressValidationBlock] error:NULL];
+        success &= [self registerFormat:@"regex" withBlock:[self regexpValidationBlock] error:NULL];
         
         NSAssert(success, @"Registering standard formats must succeed!");
     }
@@ -210,14 +214,56 @@ static NSMutableDictionary<NSString *, VVJSONSchemaFormatValidatorBlock> *blockB
     };
 }
 
++ (VVJSONSchemaFormatValidatorBlock)regexpValidationBlock
+{
+    return ^BOOL(id instance) {
+        if ([instance isKindOfClass:[NSString class]] == NO) {
+            return NO;
+        }
+        
+        NSError *error = nil;
+        __unused NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:instance options:kNilOptions error:&error];
+        
+        return error == nil;
+    };
+}
+
 + (NSRegularExpression *)dateTimeRegularExpression
 {
-    NSString *pattern = @"^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:.\\d+)?((\\-|\\+)\\d{2}:\\d{2}|Z)$";
+    NSString *pattern = [NSString stringWithFormat:@"^%@T%@$", [self dateRegularExpressionString], [self timeRegularExpressionString]];
     
-    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:(NSRegularExpressionOptions)0 error:NULL];
+    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
     NSAssert(regexp != nil, @"Format regular expression must be valid.");
     
     return regexp;
+}
+
++ (NSRegularExpression *)dateRegularExpression
+{
+    NSString *pattern = [NSString stringWithFormat:@"^%@$", [self dateRegularExpressionString]];
+    
+    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
+    NSAssert(regexp != nil, @"Format regular expression must be valid.");
+    
+    return regexp;
+}
+
++ (NSRegularExpression *)timeRegularExpression
+{
+    NSString *pattern = [NSString stringWithFormat:@"^%@$", [self timeRegularExpressionString]];
+    
+    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
+    NSAssert(regexp != nil, @"Format regular expression must be valid.");
+    
+    return regexp;
+}
+
++ (NSString *)dateRegularExpressionString {
+    return @"(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])";
+}
+
++ (NSString *)timeRegularExpressionString {
+    return @"(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?";
 }
 
 + (NSRegularExpression *)emailRegularExpression
@@ -266,7 +312,7 @@ static NSMutableDictionary<NSString *, VVJSONSchemaFormatValidatorBlock> *blockB
     // included in all copies or substantial portions of the Software.
     NSString *pattern =
     @"^"
-    @"(?:(?:https?|ftp):\\/\\/)"
+    @"(?:(?:https?|ftp)://)"
     @"(?:\\S+(?::\\S*)?@)?"
     @"(?:"
     @"(?!(?:10|127)(?:\\.\\d{1,3}){3})"
@@ -275,14 +321,25 @@ static NSMutableDictionary<NSString *, VVJSONSchemaFormatValidatorBlock> *blockB
     @"(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])"
     @"(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}"
     @"(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))"
-    @"|"
-    @"(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)"
+    @"|""(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)"
     @"(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*"
     @"(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))"
+    @"\\.?"
     @")"
     @"(?::\\d{2,5})?"
-    @"(?:\\/\\S*)?"
+    @"(?:[/?#]\\S*)?"
     @"$";
+    
+    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
+    NSAssert(regexp != nil, @"Format regular expression must be valid.");
+    
+    return regexp;
+}
+
++ (NSRegularExpression *)URIReferenceRegularExpression
+{
+    NSString *pattern =
+    @"^[A-Za-z][A-Za-z0-9+.-]*:(//(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|:)*@)?([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=])*(:[0-9]*)?(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*|/(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])+(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*)?|([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])+(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*|())(\\?(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])|[/?])*)?(#(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])|[/?])*)?|(//(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|:)*@)?([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=])*(:[0-9]*)?(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*|/(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])+(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*)?|([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|@)+(/([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])*)*|())(\\?(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])|[/?])*)?(#(([A-Za-z0-9._~-]|%[0-9A-Fa-f]{2}|[!$&'()*+,;=]|[:@])|[/?])*)?$";
     
     NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
     NSAssert(regexp != nil, @"Format regular expression must be valid.");

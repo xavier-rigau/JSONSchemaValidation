@@ -46,6 +46,10 @@ typedef NS_ENUM(NSUInteger, VVJSONSchemaErrorCode) {
     VVJSONSchemaErrorCodeValidatorKeywordAlreadyDefined = 201,
     /** Attempted to register a format validator with already defined format name. */
     VVJSONSchemaErrorCodeFormatNameAlreadyDefined = 202,
+    /** Attempted to register a contentEncoding decoder with already defined encoding name. */
+    VVJSONSchemaErrorCodeContentDecoderAlreadyDefined = 203,
+    /** Attempted to register a contentMediaType validator with already defined content media type. */
+    VVJSONSchemaErrorCodeContentMediaTypeValidatorAlreadyDefined = 204,
     
     /** JSON instance validation against the schema failed. */
     VVJSONSchemaErrorCodeValidationFailed = 300,
@@ -71,7 +75,6 @@ typedef NS_ENUM(NSUInteger, VVJSONSchemaErrorCode) {
 /**
  Creates and returns a validation error object with `VVJSONSchemaErrorDomain` domain, `VVJSONSchemaErrorCodeValidationFailed` error code.
  @discussion This convenience method is intended to be used for creating error objects caused by failing JSON validation. Validation context is used to infer current validated object and validation path stored in the returned error object. Validated object is encoded as a JSON string for human-readability.
- @param failingObject Object that caused the error (invalid JSON instance). Returned error will contain this object under `VVJSONSchemaErrorFailingObjectKey` key in `userInfo`, encoded back into a JSON string if possible. Must not be nil.
  @param failingValidator Validator object that failed JSON validation. Returned error will contain this object under `VVJSONSchemaErrorFailingValidatorKey` key in `userInfo`. Must not be nil.
  @param failureReason Validation reason as defined by the failing validator object. Returned error will contain this string in `localizedFailureReason`. Must not be nil.
  @return Configured error object.

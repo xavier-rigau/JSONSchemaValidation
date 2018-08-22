@@ -8,20 +8,28 @@
 
 #import "VVJSONSchemaTypeValidator.h"
 #import "VVJSONSchemaErrors.h"
+#import "VVJSONSchemaFactory.h"
 #import "NSNumber+VVJSONNumberTypes.h"
 
 VVJSONSchemaInstanceTypes VVJSONSchemaInstanceTypeFromString(NSString *string);
 NSString *NSStringFromVVJSONSchemaInstanceTypes(VVJSONSchemaInstanceTypes types);
 
+@interface VVJSONSchemaTypeValidator ()
+
+@property (nonatomic, strong) VVJSONSchemaSpecification *specification;
+
+@end
+
 @implementation VVJSONSchemaTypeValidator
 
 static NSString * const kSchemaKeywordType = @"type";
 
-- (instancetype)initWithTypes:(VVJSONSchemaInstanceTypes)types
+- (instancetype)initWithTypes:(VVJSONSchemaInstanceTypes)types specification:(VVJSONSchemaSpecification *)specification
 {
     self = [super init];
     if (self) {
         _types = types;
+        _specification = specification;
     }
     
     return self;
@@ -37,7 +45,7 @@ static NSString * const kSchemaKeywordType = @"type";
     return [NSSet setWithObject:kSchemaKeywordType];
 }
 
-+ (instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(__unused VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
++ (instancetype)validatorWithDictionary:(NSDictionary<NSString *, id> *)schemaDictionary schemaFactory:(VVJSONSchemaFactory *)schemaFactory error:(NSError * __autoreleasing *)error
 {
     id typesObject = schemaDictionary[kSchemaKeywordType];
     
@@ -64,7 +72,7 @@ static NSString * const kSchemaKeywordType = @"type";
     }
     
     if (types != VVJSONSchemaInstanceTypesNone) {
-        return [[self alloc] initWithTypes:types];
+        return [[self alloc] initWithTypes:types specification:schemaFactory.specification];
     } else {
         if (error != NULL) {
             *error = [NSError vv_JSONSchemaErrorWithCode:VVJSONSchemaErrorCodeInvalidSchemaFormat failingObject:schemaDictionary];
@@ -90,8 +98,20 @@ static NSString * const kSchemaKeywordType = @"type";
     if ((types & VVJSONSchemaInstanceTypesString) != 0 && [instance isKindOfClass:[NSString class]]) {
         return YES;
     }
-    if ((types & VVJSONSchemaInstanceTypesInteger) != 0 && [instance isKindOfClass:[NSNumber class]] && [instance vv_isInteger]) {
-        return YES;
+    if ((types & VVJSONSchemaInstanceTypesInteger) != 0 && [instance isKindOfClass:[NSNumber class]]) {
+        if ([instance vv_isInteger]) {
+            return YES;
+        }
+        if ((self.specification.version == VVJSONSchemaSpecificationVersionDraft6 ||
+             self.specification.version == VVJSONSchemaSpecificationVersionDraft7) &&
+            [instance vv_isFloat]) {
+            // "a float without fractional part is an integer"
+            double doubleValue = [instance doubleValue];
+            double fractionalPart = fmod(doubleValue, 1.0);
+            if (fractionalPart == 0.0) {
+                return YES;
+            }
+        }
     }
     if ((types & VVJSONSchemaInstanceTypesNumber) != 0 && [instance isKindOfClass:[NSNumber class]] && [instance vv_isBoolean] == NO) {
         return YES;
