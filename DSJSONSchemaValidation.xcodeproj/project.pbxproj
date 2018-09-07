@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A03A85B214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A03A85A214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m */; };
+		2A03A85C214263FE00788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A03A85A214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m */; };
+		2A03A85D214263FE00788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A03A85A214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m */; };
+		2A03A85E214263FF00788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A03A85A214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m */; };
+		2A03A85F214263FF00788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A03A85A214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m */; };
 		2A377C5D211C230000B0508F /* draft4 in Resources */ = {isa = PBXBuildFile; fileRef = 2A377C5C211C230000B0508F /* draft4 */; };
 		2A377C5F211C2F1200B0508F /* draft6 in Resources */ = {isa = PBXBuildFile; fileRef = 2A377C5E211C2F1200B0508F /* draft6 */; };
 		2A377C61211C2F6D00B0508F /* DSJSONSchemaDraft6Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A377C60211C2F6D00B0508F /* DSJSONSchemaDraft6Tests.m */; };
@@ -346,6 +351,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2A03A859214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+DSJSONDeepMutableCopy.h"; sourceTree = "<group>"; };
+		2A03A85A214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DSJSONDeepMutableCopy.m"; sourceTree = "<group>"; };
 		2A377C5C211C230000B0508F /* draft4 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = draft4; sourceTree = "<group>"; };
 		2A377C5E211C2F1200B0508F /* draft6 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = draft6; sourceTree = "<group>"; };
 		2A377C60211C2F6D00B0508F /* DSJSONSchemaDraft6Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSJSONSchemaDraft6Tests.m; sourceTree = "<group>"; };
@@ -492,6 +499,8 @@
 				2A659F5B212E067D003D9FBD /* NSArray+DSJSONComparison.m */,
 				2A659F56212E067D003D9FBD /* NSDictionary+DSJSONComparison.h */,
 				2A659F5D212E067D003D9FBD /* NSDictionary+DSJSONComparison.m */,
+				2A03A859214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.h */,
+				2A03A85A214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m */,
 				2A659F5C212E067D003D9FBD /* NSNumber+DSJSONNumberTypes.h */,
 				2A659F57212E067D003D9FBD /* NSNumber+DSJSONNumberTypes.m */,
 				2A659F60212E067D003D9FBD /* NSObject+DSJSONComparison.h */,
@@ -1011,6 +1020,7 @@
 				2A659FA7212E067D003D9FBD /* NSString+DSJSONPointer.m in Sources */,
 				7D4CAED51A4FFC68003E1281 /* DSJSONSchemaReference.m in Sources */,
 				2A659FA2212E067D003D9FBD /* NSDictionary+DSJSONComparison.m in Sources */,
+				2A03A85B214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */,
 				2A65A020212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m in Sources */,
 				2A659FFA212E067D003D9FBD /* DSJSONSchemaFormatValidator.m in Sources */,
 				2A659FFF212E067D003D9FBD /* DSJSONSchemaDependenciesValidator.m in Sources */,
@@ -1068,6 +1078,7 @@
 				2A436E53212621510004B104 /* DSJSONSchemaBaseTests.m in Sources */,
 				7D4CAF671A519C17003E1281 /* DSJSONSchema.m in Sources */,
 				2A659FD5212E067D003D9FBD /* DSJSONSchemaArrayItemsValidator.m in Sources */,
+				2A03A85C214263FE00788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */,
 				2A659FD0212E067D003D9FBD /* DSJSONSchemaObjectValidator.m in Sources */,
 				2A65A021212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m in Sources */,
 				7D4CAF2F1A518E87003E1281 /* DSJSONSchemaTestCase.m in Sources */,
@@ -1101,6 +1112,7 @@
 				2A659FA9212E067D003D9FBD /* NSString+DSJSONPointer.m in Sources */,
 				2AB57FFE212D555C004708E6 /* DSJSONSchemaValidationOptions.m in Sources */,
 				2A659FA4212E067D003D9FBD /* NSDictionary+DSJSONComparison.m in Sources */,
+				2A03A85D214263FE00788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */,
 				2A65A022212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m in Sources */,
 				2A659FFC212E067D003D9FBD /* DSJSONSchemaFormatValidator.m in Sources */,
 				2A65A001212E067D003D9FBD /* DSJSONSchemaDependenciesValidator.m in Sources */,
@@ -1142,6 +1154,7 @@
 				2A659FAB212E067D003D9FBD /* NSString+DSJSONPointer.m in Sources */,
 				2AB57FFF212D555D004708E6 /* DSJSONSchemaValidationOptions.m in Sources */,
 				2A659FA6212E067D003D9FBD /* NSDictionary+DSJSONComparison.m in Sources */,
+				2A03A85F214263FF00788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */,
 				2A65A024212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m in Sources */,
 				2A659FFE212E067D003D9FBD /* DSJSONSchemaFormatValidator.m in Sources */,
 				2A65A003212E067D003D9FBD /* DSJSONSchemaDependenciesValidator.m in Sources */,
@@ -1183,6 +1196,7 @@
 				2A659FAA212E067D003D9FBD /* NSString+DSJSONPointer.m in Sources */,
 				2A67AA97211E0DE8001A3290 /* DSJSONSchemaSpecification.m in Sources */,
 				2A659FA5212E067D003D9FBD /* NSDictionary+DSJSONComparison.m in Sources */,
+				2A03A85E214263FF00788BE3 /* NSDictionary+DSJSONDeepMutableCopy.m in Sources */,
 				2A65A023212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m in Sources */,
 				2A659FFD212E067D003D9FBD /* DSJSONSchemaFormatValidator.m in Sources */,
 				2A65A002212E067D003D9FBD /* DSJSONSchemaDependenciesValidator.m in Sources */,

@@ -30,6 +30,13 @@
                         "additional2": 2
                     }
                 },
+                "shouldBeData": {
+                    "foo": 0,
+                    "bar": {
+                        "baz": "abc",
+                        "additional2": 2
+                    }
+                },
                 "valid": true
             }
         ]
@@ -50,6 +57,10 @@
                     "foo": "foo",
                     "bar": "bar",
                     "baz": "baz-to-be-removed"
+                },
+                "shouldBeData": {
+                    "foo": "foo",
+                    "bar": "bar"
                 },
                 "valid": true
             }
@@ -85,7 +96,13 @@
                         "additional": "will be removed"
                     }
                 },
-                "valid": true
+                "shouldBeData": {
+                    "obj": {
+                        "a": "valid",
+                        "b": "should not be removed",
+                    }
+                },
+                "valid": false
             }
         ]
     }

@@ -8,6 +8,7 @@
 
 #import "DSJSONSchemaTestCase.h"
 #import "DSJSONSchema.h"
+#import "NSDictionary+DSJSONDeepMutableCopy.h"
 
 @interface DSJSONSchemaTestCase ()
 
@@ -89,7 +90,11 @@
     
     for (DSJSONSchemaTest *test in self.tests) {
         NSError *internalError = nil;
-        BOOL valid = [schema validateObject:test.testData withError:&internalError];
+        NSDictionary *testData = test.testData;
+        if (self.schema.options.removeAdditional != DSJSONSchemaValidationOptionsRemoveAdditionalNone) {
+            testData = [testData ds_deepMutableCopy];
+        }
+        BOOL valid = [schema validateObject:testData withError:&internalError];
         if (valid == NO && internalError == nil) {
             *error = [NSError errorWithDomain:@"com.argentumko.JSONSchemaValidationTests" code:-1 userInfo:@{ NSLocalizedDescriptionKey : @"Validation failed, but no error was returned." }];
             NSLog(@"Test '%@' failed.", test);
@@ -109,6 +114,17 @@
             NSLog(@"Test '%@' failed.", test);
             return NO;
         }
+        
+        if (test.shouldBeData) {
+            BOOL testDataIsValid = [test.shouldBeData isEqual:testData];
+            if (!testDataIsValid) {
+                if (error != NULL) {
+                    *error = [NSError errorWithDomain:@"com.argentumko.JSONSchemaValidationTests" code:-1 userInfo:@{ NSLocalizedDescriptionKey : @"Input test data is not equal to the sample data" }];
+                }
+                NSLog(@"Test '%@' failed.", test);
+                return NO;
+            }
+        }
     }
     
     return YES;
@@ -122,17 +138,19 @@
 {
     NSString *description = testObject[@"description"];
     id testData = testObject[@"data"];
+    id shouldBeData = testObject[@"shouldBeData"];
     BOOL valid = [testObject[@"valid"] boolValue];
     
-    return [[self alloc] initWithDescription:description data:testData valid:valid];
+    return [[self alloc] initWithDescription:description data:testData shouldBeData:shouldBeData valid:valid];
 }
 
-- (instancetype)initWithDescription:(NSString *)description data:(id)data valid:(BOOL)valid
+- (instancetype)initWithDescription:(NSString *)description data:(id)data shouldBeData:(nullable id)shouldBeData valid:(BOOL)valid
 {
     self = [super init];
     if (self) {
         _testDescription = description;
         _testData = data;
+        _shouldBeData = shouldBeData;
         _isValid = valid;
     }
     
