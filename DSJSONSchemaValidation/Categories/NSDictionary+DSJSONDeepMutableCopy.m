@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation NSDictionary (DSJSONDeepMutableCopy)
 
-- (instancetype)ds_deepMutableCopy
+- (NSMutableDictionary *)ds_deepMutableCopy
 {
     NSMutableDictionary *mutableCopy = (NSMutableDictionary *)CFBridgingRelease(CFPropertyListCreateDeepCopy(kCFAllocatorDefault, (CFDictionaryRef)self, kCFPropertyListMutableContainers));
     return mutableCopy;

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Returns deep mutable copy of the receiver (only containers will be mutable)
  */
-- (instancetype)ds_deepMutableCopy;
+- (NSMutableDictionary *)ds_deepMutableCopy;
 
 @end
 
