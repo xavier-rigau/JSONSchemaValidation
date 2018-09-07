@@ -25,3 +25,7 @@ FOUNDATION_EXPORT const unsigned char DSJSONSchemaValidationVersionString[];
 #import <DSJSONSchemaValidation/DSJSONSchemaFactory.h>
 #import <DSJSONSchemaValidation/DSJSONSchemaValidationContext.h>
 #import <DSJSONSchemaValidation/DSJSONSchemaFormatValidator.h>
+
+// Helper
+
+#import <DSJSONSchemaValidation/NSDictionary+DSJSONDeepMutableCopy.h>

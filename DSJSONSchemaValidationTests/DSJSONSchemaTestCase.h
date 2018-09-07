@@ -36,10 +36,11 @@
 
 @property (nonatomic, readonly, strong) NSString *testDescription;
 @property (nonatomic, readonly, strong) id testData;
+@property (nullable, nonatomic, readonly, strong) id shouldBeData;
 @property (nonatomic, readonly, assign) BOOL isValid;
 
 + (instancetype)testWithObject:(NSDictionary<NSString *, id> *)testObject;
 
-- (instancetype)initWithDescription:(NSString *)description data:(id)data valid:(BOOL)valid;
+- (instancetype)initWithDescription:(NSString *)description data:(id)data shouldBeData:(nullable id)shouldBeData valid:(BOOL)valid;
 
 @end
