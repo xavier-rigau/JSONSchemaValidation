@@ -57,19 +57,19 @@
 
 - (void)testNumbersComparison
 {
-    XCTAssertFalse([@(YES) vv_isStrictEqualToNumber:@(NO)]);
-    XCTAssertTrue([@(YES) vv_isStrictEqualToNumber:@(YES)]);
-    XCTAssertFalse([@(10) vv_isStrictEqualToNumber:@(20)]);
-    XCTAssertTrue([@(30) vv_isStrictEqualToNumber:@(30)]);
-    XCTAssertFalse([@(10.0) vv_isStrictEqualToNumber:@(10.1)]);
-    XCTAssertTrue([@(20.0) vv_isStrictEqualToNumber:@(20.0)]);
+    XCTAssertFalse([@(YES) ds_isStrictEqualToNumber:@(NO)]);
+    XCTAssertTrue([@(YES) ds_isStrictEqualToNumber:@(YES)]);
+    XCTAssertFalse([@(10) ds_isStrictEqualToNumber:@(20)]);
+    XCTAssertTrue([@(30) ds_isStrictEqualToNumber:@(30)]);
+    XCTAssertFalse([@(10.0) ds_isStrictEqualToNumber:@(10.1)]);
+    XCTAssertTrue([@(20.0) ds_isStrictEqualToNumber:@(20.0)]);
     
-    XCTAssertFalse([@(YES) vv_isStrictEqualToNumber:@(1)]);
-    XCTAssertFalse([@(NO) vv_isStrictEqualToNumber:@(0)]);
-    XCTAssertFalse([@(YES) vv_isStrictEqualToNumber:@(1.0)]);
-    XCTAssertFalse([@(NO) vv_isStrictEqualToNumber:@(0.0)]);
-    XCTAssertFalse([@(1) vv_isStrictEqualToNumber:@(1.0)]);
-    XCTAssertFalse([@(0) vv_isStrictEqualToNumber:@(0.0)]);
+    XCTAssertFalse([@(YES) ds_isStrictEqualToNumber:@(1)]);
+    XCTAssertFalse([@(NO) ds_isStrictEqualToNumber:@(0)]);
+    XCTAssertFalse([@(YES) ds_isStrictEqualToNumber:@(1.0)]);
+    XCTAssertFalse([@(NO) ds_isStrictEqualToNumber:@(0.0)]);
+    XCTAssertFalse([@(1) ds_isStrictEqualToNumber:@(1.0)]);
+    XCTAssertFalse([@(0) ds_isStrictEqualToNumber:@(0.0)]);
 }
 
 - (void)testArrayDuplicates
