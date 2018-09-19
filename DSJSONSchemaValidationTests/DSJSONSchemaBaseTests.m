@@ -42,7 +42,7 @@
 {
     static NSString * const kBaseRemoteSchemasURIString = @"http://localhost:1234/";
     
-    VVMutableJSONSchemaStorage *storage = [VVMutableJSONSchemaStorage storage];
+    DSMutableJSONSchemaStorage *storage = [DSMutableJSONSchemaStorage storage];
     NSURL *baseRemoteSchemasURI = [NSURL URLWithString:kBaseRemoteSchemasURIString];
     
     NSArray<NSURL *> *urls = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"json" subdirectory:@"remotes"];
@@ -62,7 +62,7 @@
     return [storage copy];
 }
 
-+ (void)addSchemaFromURL:(NSURL *)url withScopeURI:(NSURL *)scopeURI intoStorage:(VVMutableJSONSchemaStorage *)storage
++ (void)addSchemaFromURL:(NSURL *)url withScopeURI:(NSURL *)scopeURI intoStorage:(DSMutableJSONSchemaStorage *)storage
 {
     NSData *schemaData = [NSData dataWithContentsOfURL:url];
     DSJSONSchema *schema = [DSJSONSchema schemaWithData:schemaData baseURI:scopeURI referenceStorage:nil specification:[self specification] options:nil error:NULL];

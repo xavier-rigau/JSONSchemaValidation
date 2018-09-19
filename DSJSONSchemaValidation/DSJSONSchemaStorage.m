@@ -150,14 +150,14 @@
 
 - (id)mutableCopyWithZone:(__unused NSZone *)zone
 {
-    return [[VVMutableJSONSchemaStorage alloc] initWithMapping:_mapping];
+    return [[DSMutableJSONSchemaStorage alloc] initWithMapping:_mapping];
 }
 
 @end
 
-#pragma mark - VVMutableJSONSchemaStorage
+#pragma mark - DSMutableJSONSchemaStorage
 
-@implementation VVMutableJSONSchemaStorage
+@implementation DSMutableJSONSchemaStorage
 
 - (BOOL)addSchema:(DSJSONSchema *)schema
 {
