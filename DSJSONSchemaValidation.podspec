@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'DSJSONSchemaValidation'
-  s.version = '2.0.4'
+  s.version = '2.0.5'
   s.authors = {'Vlas Voloshin' => 'argentumko@gmail.com', 'Andrew Podkovyrin' => 'podkovyrin@gmail.com'}
   s.homepage = 'https://github.com/dashevo/JSONSchemaValidation'
   s.social_media_url = 'https://twitter.com/podkovyr'
