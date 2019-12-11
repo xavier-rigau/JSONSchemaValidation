@@ -178,7 +178,7 @@
 		2A65A022212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A659F7C212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m */; };
 		2A65A023212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A659F7C212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m */; };
 		2A65A024212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A659F7C212E067D003D9FBD /* DSJSONSchemaObjectPropertiesValidator.m */; };
-		2A65A025212E067D003D9FBD /* DSJSONSchemaFormatValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A659F7D212E067D003D9FBD /* DSJSONSchemaFormatValidator.h */; };
+		2A65A025212E067D003D9FBD /* DSJSONSchemaFormatValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A659F7D212E067D003D9FBD /* DSJSONSchemaFormatValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A65A026212E067D003D9FBD /* DSJSONSchemaFormatValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A659F7D212E067D003D9FBD /* DSJSONSchemaFormatValidator.h */; };
 		2A65A027212E067D003D9FBD /* DSJSONSchemaFormatValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A659F7D212E067D003D9FBD /* DSJSONSchemaFormatValidator.h */; };
 		2A65A028212E067D003D9FBD /* DSJSONSchemaNumericValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A659F7E212E067D003D9FBD /* DSJSONSchemaNumericValidator.h */; };
@@ -242,6 +242,9 @@
 		2AB57FFF212D555D004708E6 /* DSJSONSchemaValidationOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AB57FFB212D4B8B004708E6 /* DSJSONSchemaValidationOptions.m */; };
 		2AB58000212D555E004708E6 /* DSJSONSchemaValidationOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AB57FFB212D4B8B004708E6 /* DSJSONSchemaValidationOptions.m */; };
 		2ACBB023212DDC2E0099B282 /* options in Resources */ = {isa = PBXBuildFile; fileRef = 2ACBB022212DDC2E0099B282 /* options */; };
+		796C650F23A0628E00E06D66 /* NSDictionary+DSJSONDeepMutableCopy.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A03A859214262B900788BE3 /* NSDictionary+DSJSONDeepMutableCopy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		796C651023A062BF00E06D66 /* DSJSONSchemaSpecification.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A67AA8B211D5E85001A3290 /* DSJSONSchemaSpecification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		796C651123A062E600E06D66 /* DSJSONSchemaValidationOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AB57FFA212D4B8B004708E6 /* DSJSONSchemaValidationOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D32BE8B1A545EFF009EB554 /* NSObject+DSJSONComparisonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D32BE8A1A545EFF009EB554 /* NSObject+DSJSONComparisonTests.m */; };
 		7D4CAEBD1A4FF95A003E1281 /* libDSJSONSchemaValidation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4CAEB11A4FF95A003E1281 /* libDSJSONSchemaValidation.a */; };
 		7D4CAECD1A4FF9A9003E1281 /* DSJSONSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4CAECC1A4FF9A9003E1281 /* DSJSONSchema.m */; };
@@ -701,6 +704,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A65A025212E067D003D9FBD /* DSJSONSchemaFormatValidator.h in Headers */,
+				796C651123A062E600E06D66 /* DSJSONSchemaValidationOptions.h in Headers */,
+				796C651023A062BF00E06D66 /* DSJSONSchemaSpecification.h in Headers */,
+				796C650F23A0628E00E06D66 /* NSDictionary+DSJSONDeepMutableCopy.h in Headers */,
 				7D571DCB1A6169940099BCCF /* DSJSONSchemaStorage.h in Headers */,
 				7DD0399A1A624A5A00E6639F /* DSJSONSchemaValidationContext.h in Headers */,
 				2A659FBC212E067D003D9FBD /* DSJSONSchema+StandardValidators.h in Headers */,
@@ -715,7 +722,6 @@
 				2A65A00F212E067D003D9FBD /* DSJSONSchemaCombiningValidator.h in Headers */,
 				2A65A039212E067D003D9FBD /* DSJSONSchemaPropertyNamesValidator.h in Headers */,
 				2A65A012212E067D003D9FBD /* DSJSONSchemaObjectValidator.h in Headers */,
-				2A65A025212E067D003D9FBD /* DSJSONSchemaFormatValidator.h in Headers */,
 				2A659FE8212E067D003D9FBD /* DSJSONSchemaConstValidator.h in Headers */,
 				7D571DCD1A6169940099BCCF /* DSJSONSchemaErrors.h in Headers */,
 				2A65A015212E067D003D9FBD /* DSJSONSchemaArrayItemsValidator.h in Headers */,
